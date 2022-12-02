@@ -10,6 +10,7 @@ export const authOptions = {
         email: { label: "Email", type: "string" },
         password: { label: "Password", type: "password" },
       },
+      //@ts-ignore
       async authorize(credentials, req) {
         try {
           const bcrypt = require("bcrypt");
@@ -22,9 +23,6 @@ export const authOptions = {
               email: true,
               name: true,
               password: true,
-              image: true,
-              accountStatus: true,
-              notificationCount: true,
             },
           });
           if (user) {
