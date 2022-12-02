@@ -69,6 +69,7 @@ export default function Login(props) {
                     src={logo}
                     alt="ENSET's logo"
                     loading="eager"
+                    priority={true}
                   />
                 </div>
                 <h2

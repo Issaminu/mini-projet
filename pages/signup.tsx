@@ -101,6 +101,7 @@ export function Signup(props) {
                     className="mx-auto h-10 w-auto"
                     src={logo}
                     alt="ENSET's logo"
+                    priority={true}
                   />
                 </div>
                 <h2
