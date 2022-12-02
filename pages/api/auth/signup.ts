@@ -23,11 +23,14 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
           throw { meta: { target: "password_length" } };
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await prisma.users.create({
+        const user = await prisma.user.create({
           data: {
             name: name,
             email: email,
             password: hashedPassword,
+            phoneNumber: "TEMP",
+            cin: "TEMP",
+            isManager: false,
           },
         });
         if (!user) {

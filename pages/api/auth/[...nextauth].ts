@@ -14,7 +14,7 @@ export const authOptions = {
       async authorize(credentials, req) {
         try {
           const bcrypt = require("bcrypt");
-          const user = await prisma.users.findUnique({
+          const user = await prisma.user.findUnique({
             where: {
               email: credentials.email,
             },

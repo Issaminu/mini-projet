@@ -87,7 +87,7 @@ export function Signup(props) {
         <div
           className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"
           style={{
-            background: "url('/login-bg.webp') no-repeat center center fixed", //Credit to Johny Goerend on Unsplash: https://unsplash.com/photos/Oz2ZQ2j8We8
+            background: "url('/login-bg.webp') no-repeat center center fixed",
             backgroundSize: "cover",
             minHeight: "100vh",
           }}
