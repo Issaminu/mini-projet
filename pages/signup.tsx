@@ -98,9 +98,9 @@ export function Signup(props) {
               <div className="sm:mx-auto mb-10 sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                   <Image
-                    className="mx-auto h-12 w-auto"
+                    className="mx-auto h-10 w-auto"
                     src={logo}
-                    alt="Next Auth's logo"
+                    alt="ENSET's logo"
                   />
                 </div>
                 <h2
