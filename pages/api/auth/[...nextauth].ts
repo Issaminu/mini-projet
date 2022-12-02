@@ -5,7 +5,7 @@ import prisma from "../../../components/prisma";
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      id: "Credentials",
+      id: "credentials",
       credentials: {
         email: { label: "Email", type: "string" },
         password: { label: "Password", type: "password" },
