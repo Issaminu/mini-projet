@@ -16,7 +16,9 @@ export default function App({
         <title>Mini Projet | ENSET Mohammedia</title>
       </Head>
       <RecoilRoot>
-        <Component className={inter.className} {...pageProps} />
+        <div className={inter.className}>
+          <Component {...pageProps} />
+        </div>
       </RecoilRoot>
     </SessionProvider>
   );
