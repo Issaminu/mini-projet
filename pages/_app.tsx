@@ -3,7 +3,9 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import { RecoilRoot } from "recoil";
+import { Inter } from "@next/font/google";
 
+const inter = Inter({ subsets: ["latin"] });
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
@@ -14,7 +16,7 @@ export default function App({
         <title>Mini Projet | ENSET Mohammedia</title>
       </Head>
       <RecoilRoot>
-        <Component {...pageProps} />
+        <Component className={inter.className} {...pageProps} />
       </RecoilRoot>
     </SessionProvider>
   );
