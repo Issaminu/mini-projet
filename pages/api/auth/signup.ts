@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../components/prisma";
+import prisma from "../../../prisma/prisma";
 const bcrypt = require("bcrypt");
 
 const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
