@@ -13,17 +13,15 @@ const error = "Wrong email or password";
 
 export default function Login(props) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(true);
+  const email = useRef<HTMLInputElement>();
+  const password = useRef<HTMLInputElement>();
+  const [areInfoValid, setAreInfoValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const { data: session, status } = useSession();
   const ref = useRef(null);
   useEffect(() => {
-    setIsEmailValid(true);
-    setIsPasswordValid(true);
+    setAreInfoValid(true);
     if (session) {
       setUser(session.user);
       router.push("/dashboard");
@@ -35,14 +33,13 @@ export default function Login(props) {
     ref.current.staticStart();
     await signIn("credentials", {
       redirect: false,
-      email: email,
-      password: password,
+      email: email.current.value,
+      password: password.current.value,
       callbackUrl: `${window.location.origin}`,
     }).then(async (res) => {
       ref.current.complete();
       if (!res.ok) {
-        setIsEmailValid(false);
-        setIsPasswordValid(false);
+        setAreInfoValid(false);
         setIsLoading(false);
       }
     });
@@ -84,112 +81,103 @@ export default function Login(props) {
               </div>
               <form className="space-y-4" onSubmit={(e) => handleSubmit(e)}>
                 <div>
-                  {isEmailValid ? (
+                  {areInfoValid ? (
                     <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Email
-                      </label>
-                      <div className="mt-1">
-                        <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                          autoComplete="email"
-                          required
-                          autoFocus
-                          className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Email
-                      </label>
-                      <div className="mt-1 relative rounded-md shadow-sm">
-                        <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                          autoComplete="email"
-                          required
-                          className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                          aria-invalid="true"
-                          aria-describedby="email-error"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  {isPasswordValid ? (
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Password
-                      </label>
-                      <div className="mt-1">
-                        <input
-                          id="password"
-                          name="password"
-                          type="password"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                          autoComplete="password"
-                          required
-                          className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        Password
-                      </label>
-                      <div className="mt-1 relative rounded-md shadow-sm">
-                        <input
-                          id="password"
-                          name="password"
-                          type="password"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                          autoComplete="password"
-                          required
-                          className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
-                          aria-invalid="true"
-                          aria-describedby="password-error"
-                        />
-                      </div>
-                      <div className="flex flex-row">
-                        <ExclamationCircleIcon
-                          className="h-4 w-4 mt-2 mr-2 text-red-500"
-                          aria-hidden="true"
-                        />
-                        <p
-                          className="mt-2 text-xs text-red-600"
-                          id="password-error"
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
                         >
-                          {error}
-                        </p>
+                          Email
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            ref={email}
+                            autoComplete="email"
+                            required
+                            autoFocus
+                            className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <label
+                          htmlFor="password"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Password
+                        </label>
+                        <div className="mt-1">
+                          <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            ref={password}
+                            autoComplete="password"
+                            required
+                            className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Email
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                          <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            ref={email}
+                            autoComplete="email"
+                            required
+                            className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            aria-invalid="true"
+                            aria-describedby="email-error"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <label
+                          htmlFor="password"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Password
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                          <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            ref={password}
+                            autoComplete="password"
+                            required
+                            className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            aria-invalid="true"
+                            aria-describedby="password-error"
+                          />
+                        </div>
+                        <div className="flex flex-row">
+                          <ExclamationCircleIcon
+                            className="h-4 w-4 mt-2 mr-2 text-red-500"
+                            aria-hidden="true"
+                          />
+                          <p
+                            className="mt-2 text-xs text-red-600"
+                            id="password-error"
+                          >
+                            {error}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   )}

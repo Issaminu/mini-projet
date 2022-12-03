@@ -36,7 +36,7 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
         if (!user) {
           throw { meta: { target: "users_email_key" } };
         }
-        res.status(200).json({ ok: true, status: "success" });
+        res.status(200).json({});
       } catch (error) {
         let errorMessage = "An error has occurred, please try again later";
         switch (error.meta.target) {
@@ -46,7 +46,7 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
           case "name_length":
             errorMessage = "Name must be >= 3 and <=30 characters";
             break;
-          case "users_email_key":
+          case "User_email_key":
             errorMessage = "This email is already in use";
             break;
           case "email_not_valid":
@@ -56,11 +56,9 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
             errorMessage = "The password must be >= 8 characters";
             break;
         }
-        res.status(200).json({
-          ok: false,
+        res.status(400).json({
           error: errorMessage,
           errorType: error.meta.target,
-          status: "fail",
         });
       }
       break;

@@ -12,9 +12,9 @@ import LoadingBar from "react-top-loading-bar";
 
 export function Signup(props) {
   const { data: session, status } = useSession();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
+  const email = useRef<HTMLInputElement>();
+  const password = useRef<HTMLInputElement>();
+  const name = useRef<HTMLInputElement>();
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isNameValid, setIsNameValid] = useState(true);
   const [isPasswordValid, setIsPasswordValid] = useState(true);
@@ -25,17 +25,13 @@ export function Signup(props) {
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
   const ref = useRef(null);
-  let tempUser;
 
   useEffect(() => {
     setIsNameValid(true);
     setIsEmailValid(true);
     setIsPasswordValid(true);
     if (session) {
-      tempUser = {
-        ...session.user,
-      };
-      setUser(tempUser);
+      setUser(session.user);
       router.push("/dashboard");
     }
   }, [session]);
@@ -45,38 +41,38 @@ export function Signup(props) {
     ref.current.staticStart();
     axios
       .post("/api/auth/signup", {
-        email: email,
-        name: name,
-        password: password,
+        email: email.current.value,
+        name: name.current.value,
+        password: password.current.value,
       })
       .then(async (res) => {
         ref.current.complete();
-        if (res.status === 200 && res.data.status === "success") {
-          await signIn("credentials", {
-            redirect: false,
-            email: email,
-            password: password,
-            callbackUrl: `${window.location.origin}`,
-          });
-        }
-        if (!res.data.ok) {
-          setIsLoading(false);
-          if (
-            res.data.errorType == "email_not_valid" ||
-            res.data.errorType == "users_email_key"
-          ) {
-            setIsEmailValid(false);
-            setEmailError(res.data.error);
-          } else if (
-            res.data.errorType == "name_not_alphabet" ||
-            res.data.errorType == "name_length"
-          ) {
-            setIsNameValid(false);
-            setNameError(res.data.error);
-          } else if (res.data.errorType == "password_length") {
-            setIsPasswordValid(false);
-            setPasswordError(res.data.error);
-          }
+        await signIn("credentials", {
+          redirect: false,
+          email: email.current.value,
+          password: password.current.value,
+          callbackUrl: `${window.location.origin}`,
+        });
+      })
+      .catch((error) => {
+        ref.current.complete();
+        setIsLoading(false);
+        const response = error.response.data;
+        if (
+          response.errorType == "email_not_valid" ||
+          response.errorType == "User_email_key"
+        ) {
+          setIsEmailValid(false);
+          setEmailError(response.error);
+        } else if (
+          response.errorType == "name_not_alphabet" ||
+          response.errorType == "name_length"
+        ) {
+          setIsNameValid(false);
+          setNameError(response.error);
+        } else if (response.errorType == "password_length") {
+          setIsPasswordValid(false);
+          setPasswordError(response.error);
         }
       });
   };
@@ -129,9 +125,7 @@ export function Signup(props) {
                           id="name"
                           name="name"
                           type="text"
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
+                          ref={name}
                           autoComplete="name"
                           required
                           autoFocus
@@ -152,9 +146,7 @@ export function Signup(props) {
                           id="name"
                           name="name"
                           type="text"
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
+                          ref={name}
                           required
                           autoComplete="name"
                           className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
@@ -188,9 +180,7 @@ export function Signup(props) {
                           id="email"
                           name="email"
                           type="email"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
+                          ref={email}
                           autoComplete="email"
                           required
                           className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -210,9 +200,7 @@ export function Signup(props) {
                           id="email"
                           name="email"
                           type="email"
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
+                          ref={email}
                           autoComplete="email"
                           required
                           className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
@@ -246,9 +234,7 @@ export function Signup(props) {
                           id="password"
                           name="password"
                           type="password"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
+                          ref={password}
                           autoComplete="password"
                           required
                           className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
@@ -268,9 +254,7 @@ export function Signup(props) {
                           id="password"
                           name="password"
                           type="password"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
+                          ref={password}
                           autoComplete="password"
                           required
                           className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
