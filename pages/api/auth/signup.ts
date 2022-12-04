@@ -33,9 +33,6 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
             isManager: false,
           },
         });
-        if (!user) {
-          throw { meta: { target: "users_email_key" } };
-        }
         res.status(200).json({});
       } catch (error) {
         let errorMessage = "An error has occurred, please try again later";
