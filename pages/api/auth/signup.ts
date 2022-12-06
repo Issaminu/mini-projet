@@ -30,7 +30,6 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
             password: hashedPassword,
             phoneNumber: "TEMP",
             cin: "TEMP",
-            isManager: false,
           },
         });
         res.status(200).json({});

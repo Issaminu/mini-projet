@@ -4,7 +4,7 @@ generator js {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
@@ -16,9 +16,14 @@ model User {
   password    String   @db.VarChar(255)
   phoneNumber String   @db.VarChar(15)
   cin         String   @db.VarChar(10)
-  isManager   Boolean
+  role        Role     @default(MANAGER)
   create_time DateTime @default(now())
   update_time DateTime @default(now())
+}
+enum Role {
+  ADMIN
+  MANAGER
+  RECEPTIONIST
 }
 
 model Hotel {
