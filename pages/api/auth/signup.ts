@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../prisma/prisma";
+import { Role } from "@prisma/client";
 const bcrypt = require("bcrypt");
 
 const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -30,6 +31,7 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
             password: hashedPassword,
             phoneNumber: "TEMP",
             cin: "TEMP",
+            role: Role.MANAGER,
           },
         });
         res.status(200).json({});
