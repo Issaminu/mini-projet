@@ -32,6 +32,8 @@ const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
             phoneNumber: "TEMP",
             cin: "TEMP",
             role: Role.MANAGER,
+            isReady: false,
+            hotelId: 0,
           },
         });
         res.status(200).json({});

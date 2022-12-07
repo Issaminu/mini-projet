@@ -23,6 +23,11 @@ export const authOptions = {
               email: true,
               name: true,
               password: true,
+              phoneNumber: true,
+              cin: true,
+              role: true,
+              hotelId: true,
+              isReady: true,
             },
           });
           if (user) {
