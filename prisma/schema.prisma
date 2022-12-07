@@ -31,10 +31,10 @@ model User {
   create_time DateTime @default(now())
   update_time DateTime @default(now())
   Hotel       Hotel    @relation(fields: [hotelId], references: [id])
+  Reservation Reservation[]
 
   @@index([hotelId])
 }
-
 enum Role {
   MANAGER
   RECEPTIONIST
@@ -50,6 +50,7 @@ model Hotel {
   Floor       Floor[]
   Room        Room[]
   User        User[]
+  RoomType    RoomType[]
 }
 
 model Floor {
@@ -68,9 +69,13 @@ model RoomType {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(50)
   price       Float
+  hotelId     Int
   create_time DateTime @default(now())
   update_time DateTime @default(now())
+  hotel       Hotel    @relation(fields: [hotelId], references: [id])
   Room        Room[]
+
+  @@index([hotelId])
 }
 
 model Room {
@@ -91,7 +96,6 @@ model Room {
   @@index([typeId])
   @@index([hotelId])
 }
-
 enum RoomState {
   EMPTY
   RESERVED
@@ -119,8 +123,10 @@ model Reservation {
   create_time DateTime @default(now())
   update_time DateTime @default(now())
   client      Client   @relation(fields: [clientId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
   room        Room     @relation(fields: [roomId], references: [id])
 
   @@index([clientId])
+  @@index([userId])
   @@index([roomId])
 }
