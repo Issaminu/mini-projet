@@ -9,6 +9,15 @@ datasource db {
   relationMode = "prisma"
 }
 
+model Admin {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(50)
+  email       String   @unique @db.VarChar(60)
+  password    String   @db.VarChar(255)
+  create_time DateTime @default(now())
+  update_time DateTime @default(now())
+}
+
 model User {
   id          Int      @id @default(autoincrement())
   name        String   @db.VarChar(50)
@@ -17,11 +26,16 @@ model User {
   phoneNumber String   @db.VarChar(15)
   cin         String   @db.VarChar(10)
   role        Role     @default(MANAGER)
+  hotelId     Int
+  isReady     Boolean  @default(false)
   create_time DateTime @default(now())
   update_time DateTime @default(now())
+  Hotel       Hotel    @relation(fields: [hotelId], references: [id])
+
+  @@index([hotelId])
 }
+
 enum Role {
-  ADMIN
   MANAGER
   RECEPTIONIST
 }
@@ -35,6 +49,7 @@ model Hotel {
   update_time DateTime @default(now())
   Floor       Floor[]
   Room        Room[]
+  User        User[]
 }
 
 model Floor {
@@ -61,7 +76,7 @@ model RoomType {
 model Room {
   id          Int           @id @default(autoincrement())
   number      Int
-  isReserved  Boolean
+  RoomState   RoomState     @default(EMPTY)
   floorId     Int
   typeId      Int
   hotelId     Int
@@ -75,6 +90,12 @@ model Room {
   @@index([floorId])
   @@index([typeId])
   @@index([hotelId])
+}
+
+enum RoomState {
+  EMPTY
+  RESERVED
+  CLOSED
 }
 
 model Client {
