@@ -9,7 +9,7 @@ import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import { userState } from "../store/atoms";
 import { useRecoilState } from "recoil";
 import LoadingBar from "react-top-loading-bar";
-
+import { useCallback } from "react";
 export function Signup(props) {
   const { data: session, status } = useSession();
   const email = useRef<HTMLInputElement>();
@@ -35,47 +35,53 @@ export function Signup(props) {
       router.push("/dashboard");
     }
   }, [session]);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    ref.current.staticStart();
-    axios
-      .post("/api/auth/signup", {
-        email: email.current.value,
-        name: name.current.value,
-        password: password.current.value,
-      })
-      .then(async (res) => {
-        ref.current.complete();
-        await signIn("credentials", {
-          redirect: false,
+
+  //useCallback will allow you to save the function definition between component renders.
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+      ref.current.staticStart();
+      axios
+        .post("/api/auth/signup", {
           email: email.current.value,
+          name: name.current.value,
           password: password.current.value,
-          callbackUrl: `${window.location.origin}`,
+        })
+        .then(async (res) => {
+          ref.current.complete();
+          await signIn("credentials", {
+            redirect: false,
+            email: email.current.value,
+            password: password.current.value,
+            callbackUrl: `${window.location.origin}`,
+          });
+        })
+        .catch((error) => {
+          ref.current.complete();
+          setIsLoading(false);
+          const response = error.response.data;
+          if (
+            response.errorType == "email_not_valid" ||
+            response.errorType == "User_email_key"
+          ) {
+            setIsEmailValid(false);
+            setEmailError(response.error);
+          } else if (
+            response.errorType == "name_not_alphabet" ||
+            response.errorType == "name_length"
+          ) {
+            setIsNameValid(false);
+            setNameError(response.error);
+          } else if (response.errorType == "password_length") {
+            setIsPasswordValid(false);
+            setPasswordError(response.error);
+          }
         });
-      })
-      .catch((error) => {
-        ref.current.complete();
-        setIsLoading(false);
-        const response = error.response.data;
-        if (
-          response.errorType == "email_not_valid" ||
-          response.errorType == "User_email_key"
-        ) {
-          setIsEmailValid(false);
-          setEmailError(response.error);
-        } else if (
-          response.errorType == "name_not_alphabet" ||
-          response.errorType == "name_length"
-        ) {
-          setIsNameValid(false);
-          setNameError(response.error);
-        } else if (response.errorType == "password_length") {
-          setIsPasswordValid(false);
-          setPasswordError(response.error);
-        }
-      });
-  };
+    },
+    [],
+  )
+  
   if (status == "loading") return null;
   if (!session) {
     return (
