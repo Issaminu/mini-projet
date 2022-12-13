@@ -35,8 +35,6 @@ export function Signup(props) {
       router.push("/dashboard");
     }
   }, [session]);
-
-  //useCallback will allow you to save the function definition between component renders.
   const handleSubmit = useCallback(
     async (e) => {
       e.preventDefault();
@@ -79,9 +77,9 @@ export function Signup(props) {
           }
         });
     },
-    [],
-  )
-  
+    [email, name, password]
+  );
+
   if (status == "loading") return null;
   if (!session) {
     return (

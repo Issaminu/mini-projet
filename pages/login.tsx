@@ -2,7 +2,7 @@ import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import { userState } from "../store/atoms";
 import { useRecoilState } from "recoil";
@@ -27,23 +27,26 @@ export default function Login(props) {
       router.push("/dashboard");
     }
   }, [session]);
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    ref.current.staticStart();
-    await signIn("credentials", {
-      redirect: false,
-      email: email.current.value,
-      password: password.current.value,
-      callbackUrl: `${window.location.origin}`,
-    }).then(async (res) => {
-      ref.current.complete();
-      if (!res.ok) {
-        setAreInfoValid(false);
-        setIsLoading(false);
-      }
-    });
-  };
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+      ref.current.staticStart();
+      await signIn("credentials", {
+        redirect: false,
+        email: email.current.value,
+        password: password.current.value,
+        callbackUrl: `${window.location.origin}`,
+      }).then(async (res) => {
+        ref.current.complete();
+        if (!res.ok) {
+          setAreInfoValid(false);
+          setIsLoading(false);
+        }
+      });
+    },
+    [email, password]
+  );
   if (status == "loading") return null;
   if (!session) {
     return (
