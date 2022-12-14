@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.5",
     "@heroicons/react": "^1.0.6",
     "@next/font": "^13.0.6",
     "@prisma/client": "^4.7.1",
@@ -20,7 +21,7 @@
     "bcrypt": "^5.1.0",
     "intercept-stdout": "^0.1.2",
     "next": "13.0.6",
-    "next-auth": "^4.17.0",
+    "next-auth": "^4.18.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-top-loading-bar": "^2.3.1",
