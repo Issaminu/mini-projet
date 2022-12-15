@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback, useMemo } from "react";
 import {
   ChevronLeftIcon,
@@ -6,9 +8,8 @@ import {
   PhoneIcon,
   SearchIcon,
 } from "@heroicons/react/solid";
-import Navbar from "../../components/Navbar/Navbar";
-import Room from "../../components/Rooms/Room";
-
+import Navbar from "../Navbar/AdminNavbar";
+import Hotel from "./Hotel";
 const directory = [
   {
     id: 1,
@@ -193,42 +194,11 @@ const directory = [
       "https://images.unsplash.com/photo-1505840717430-882ce147ef2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
   },
 ];
-const team = [
-  {
-    name: "Leslie Alexander",
-    handle: "lesliealexander",
-    role: "Co-Founder / CEO",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Michael Foster",
-    handle: "michaelfoster",
-    role: "Co-Founder / CTO",
-    imageUrl:
-      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Dries Vincent",
-    handle: "driesvincent",
-    role: "Manager, Business Relations",
-    imageUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Lindsay Walton",
-    handle: "lindsaywalton",
-    role: "Front-end Developer",
-    imageUrl:
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-
-export default function Dashboard() {
+const Hotels = (props) => {
   const [roomListOpen, setRoomListOpen] = useState(true);
   const [roomOpen, setRoomOpen] = useState(false);
   const [rooms, setRooms] = useState([...directory]);
@@ -240,6 +210,8 @@ export default function Dashboard() {
     setRoomListOpen(true);
     setRoomOpen(false);
   }, [roomOpen, roomListOpen]);
+  console.log("heere is a list of hotels: ");
+  console.log(props.myRooms);
   const handleSearch = useCallback(
     (e) => {
       const query = e.target.value;
@@ -249,7 +221,6 @@ export default function Dashboard() {
         if (isMatch) return room;
       });
       setRooms(filteredRooms);
-      console.log(rooms);
     },
     [rooms]
   );
@@ -265,117 +236,116 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row">
-        <Navbar />
-        <div className="h-screen w-screen flex">
-          <div className="flex-1 relative z-0 flex overflow-hidden">
-            <aside
-              className={classNames(
-                roomListOpen
-                  ? "w-full xl:order-first xl:flex xl:flex-col flex-shrink-0 xl:w-96 border-r border-gray-200"
-                  : "hidden xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200"
-              )}
-            >
-              <div className="px-6 pt-6 pb-4">
-                <h2 className="text-lg font-medium text-gray-900">Directory</h2>
-                <p className="mt-1 text-sm text-gray-600">
-                  Search directory of 3,018 employees
-                </p>
-                <form className="mt-6 flex space-x-4" action="#">
-                  <div className="flex-1 min-w-0">
-                    <label htmlFor="search" className="sr-only">
-                      Search
-                    </label>
-                    <div className="relative rounded-md shadow-sm">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <SearchIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <input
-                        type="search"
-                        name="search"
-                        id="search"
-                        className="focus:ring-pink-500 focus:border-pink-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-                        placeholder="Search"
-                        onChange={handleSearch}
+      <div className="h-screen w-screen flex">
+        <div className="flex-1 relative z-0 flex overflow-hidden">
+          <aside
+            className={classNames(
+              roomListOpen
+                ? "w-full xl:order-first xl:flex xl:flex-col flex-shrink-0 xl:w-96 border-r border-gray-200"
+                : "hidden xl:order-first xl:flex xl:flex-col flex-shrink-0 w-96 border-r border-gray-200"
+            )}
+          >
+            <div className="px-6 pt-6 pb-4">
+              <h2 className="text-lg font-medium text-gray-900">Directory</h2>
+              <p className="mt-1 text-sm text-gray-600">
+                Search directory of {directory.length} hotels
+              </p>
+              <form className="mt-6 flex space-x-4" action="#">
+                <div className="flex-1 min-w-0">
+                  <label htmlFor="search" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative rounded-md shadow-sm">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <SearchIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
                       />
                     </div>
-                  </div>
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center px-3.5 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                  >
-                    <FilterIcon
-                      className="h-5 w-5 text-gray-400"
-                      aria-hidden="true"
+                    <input
+                      type="search"
+                      name="search"
+                      id="search"
+                      className="focus:ring-pink-500 focus:border-pink-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                      placeholder="Search"
+                      onChange={handleSearch}
                     />
-                    <span className="sr-only">Search</span>
-                  </button>
-                </form>
-              </div>
-              <nav
-                className="flex-1 min-h-0 overflow-y-auto"
-                aria-label="Directory"
-              >
-                <div className="relative">
-                  <ul
-                    role="list"
-                    className="relative z-0 divide-y divide-gray-200"
-                  >
-                    {rooms.map((person) => (
-                      <li key={person.id} onClick={handleShowRoom}>
-                        <div className="relative px-6 py-5 flex items-center space-x-3 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500">
-                          <div className="flex-shrink-0">
-                            <img
-                              className="h-10 w-10 rounded-full"
-                              src={person.imageUrl}
-                              alt=""
-                            />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <a href="#" className="focus:outline-none">
-                              <span
-                                className="absolute inset-0"
-                                aria-hidden="true"
-                              />
-                              <p className="text-sm font-medium text-gray-900">
-                                {person.name}
-                              </p>
-                              <p className="text-sm text-gray-500 truncate">
-                                {person.role}
-                              </p>
-                            </a>
-                          </div>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="inline-flex justify-center px-3.5 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                >
+                  <FilterIcon
+                    className="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">Search</span>
+                </button>
+              </form>
+            </div>
+            <nav
+              className="flex-1 min-h-0 overflow-y-auto"
+              aria-label="Directory"
+            >
+              <div className="relative">
+                <ul
+                  role="list"
+                  className="relative z-0 divide-y divide-gray-200"
+                >
+                  {rooms.map((person) => (
+                    <li key={person.id} onClick={handleShowRoom}>
+                      <div className="relative px-6 py-5 flex items-center space-x-3 hover:bg-gray-50 focus-within:ring-2 focus-within:ring-inset focus-within:ring-pink-500">
+                        <div className="flex-shrink-0">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={person.imageUrl}
+                            alt=""
+                          />
                         </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </nav>
-            </aside>
-            <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
-              {roomOpen ? (
-                <Room rooms={rooms} handleShowRoomList={handleShowRoomList} />
-              ) : (
-                <div className="h-screen bg-gray-100 flex justify-center content-center flex-wrap flex-col">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-14 w-14 mx-auto"
-                    viewBox="0 0 20 20"
-                    fill="#4b5563"
-                  >
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                  </svg>
+                        <div className="flex-1 min-w-0">
+                          <a href="#" className="focus:outline-none">
+                            <span
+                              className="absolute inset-0"
+                              aria-hidden="true"
+                            />
+                            <p className="text-sm font-medium text-gray-900">
+                              {person.name}
+                            </p>
+                            <p className="text-sm text-gray-500 truncate">
+                              {person.role}
+                            </p>
+                          </a>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </nav>
+          </aside>
+          <main className="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last">
+            {roomOpen ? (
+              <Hotel rooms={rooms} handleShowRoomList={handleShowRoomList} />
+            ) : (
+              <div className="h-screen bg-gray-100 flex justify-center content-center flex-wrap flex-col">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-14 w-14 mx-auto"
+                  viewBox="0 0 20 20"
+                  fill="#4b5563"
+                >
+                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
 
-                  <p className="text-gray-600 font-semibold">Select a room</p>
-                </div>
-              )}
-            </main>
-          </div>
+                <p className="text-gray-600 font-semibold">Select a room</p>
+              </div>
+            )}
+          </main>
         </div>
       </div>
     </>
   );
-}
+};
+
+export default Hotels;

@@ -6,7 +6,6 @@ import {
   PhoneIcon,
   SearchIcon,
 } from "@heroicons/react/solid";
-import Navbar from "../../components/Navbar/Navbar";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");

@@ -5,6 +5,8 @@ import Head from "next/head";
 import { RecoilRoot } from "recoil";
 import { Inter } from "@next/font/google";
 
+//USAGE OF THE /PAGES FOLDER IS NOW DEPRECATED, PLEASE USE THE /APP FOLDER FROM NOW ON.
+
 const inter = Inter({ subsets: ["latin"] });
 export default function App({
   Component,

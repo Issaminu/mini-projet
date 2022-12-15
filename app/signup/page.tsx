@@ -1,12 +1,13 @@
+"use client";
 import { useSession, signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "../public/enset-logo.webp";
+import logo from "../../public/enset-logo.webp";
 import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
-import { userState } from "../store/atoms";
+import { userState } from "../../store/atoms";
 import { useRecoilState } from "recoil";
 import LoadingBar from "react-top-loading-bar";
 import { useCallback } from "react";

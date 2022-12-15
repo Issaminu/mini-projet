@@ -1,8 +1,9 @@
+"use client";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { userState } from "../store/atoms";
+import { userState } from "../../store/atoms";
 import { signOut } from "next-auth/react";
 
 const Dashboard = () => {

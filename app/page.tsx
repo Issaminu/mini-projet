@@ -1,12 +1,10 @@
-import { useRouter } from "next/router";
+"use client";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-
-export const Index = () => {
+export default function Page() {
   const router = useRouter();
   useEffect(() => {
     router.push("/dashboard");
   });
   return <></>;
-};
-
-export default Index;
+}

@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    appDir: true,
+  },
 };
 const intercept = require("intercept-stdout");
 function interceptStdout(text) {
