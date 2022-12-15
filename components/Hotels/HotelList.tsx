@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/solid";
 import Navbar from "../Navbar/AdminNavbar";
 import Hotel from "./Hotel";
+import Link from "next/link";
 const directory = [
   {
     id: 1,
@@ -246,9 +247,35 @@ const Hotels = (props) => {
             )}
           >
             <div className="px-6 pt-6 pb-4">
-              <h2 className="text-lg font-medium text-gray-900">Directory</h2>
+              <div className="flex flex-row justify-between">
+                <h2 className="text-lg font-medium text-gray-900">Directory</h2>
+                <button
+                  type="button"
+                  className="inline-flex items-center border border-transparent text-xs font-medium rounded shadow-sm text-white bg-cyan-700 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                >
+                  <Link href="/admin/hotels/add-hotel">
+                    <div className="flex flex-row px-2.5 py-1.5">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        />
+                      </svg>
+                      <p>Add Hotel</p>
+                    </div>
+                  </Link>
+                </button>
+              </div>
               <p className="mt-1 text-sm text-gray-600">
-                Search directory of {directory.length} hotels
+                You are managing {directory.length} hotels.
               </p>
               <form className="mt-6 flex space-x-4" action="#">
                 <div className="flex-1 min-w-0">
@@ -338,7 +365,7 @@ const Hotels = (props) => {
                   <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                 </svg>
 
-                <p className="text-gray-600 font-semibold">Select a room</p>
+                <p className="text-gray-600 font-semibold">Select a hotel</p>
               </div>
             )}
           </main>

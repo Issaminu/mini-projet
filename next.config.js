@@ -10,7 +10,8 @@ const intercept = require("intercept-stdout");
 function interceptStdout(text) {
   if (
     text.includes("Duplicate atom key") ||
-    text.includes("Fast Refresh had to perform a full reload")
+    text.includes("Fast Refresh had to perform a full reload") ||
+    text.includes("./node_modules/debug/src/node.js")
   ) {
     return "";
   }
