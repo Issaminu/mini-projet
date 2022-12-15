@@ -11,7 +11,7 @@ import { userState } from "../../store/atoms";
 import { useRecoilState } from "recoil";
 import LoadingBar from "react-top-loading-bar";
 import { useCallback } from "react";
-export function Signup(props) {
+export default function Signup() {
   const { data: session, status } = useSession();
   const email = useRef<HTMLInputElement>();
   const password = useRef<HTMLInputElement>();
@@ -333,5 +333,3 @@ export function Signup(props) {
     );
   }
 }
-
-export default Signup;
