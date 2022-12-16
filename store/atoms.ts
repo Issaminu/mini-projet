@@ -1,3 +1,4 @@
+import { Role } from "@prisma/client";
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
@@ -7,6 +8,12 @@ export interface userState {
   id?: number;
   email?: string;
   name?: string;
+  password?: string;
+  phoneNumber?: string;
+  cin?: string;
+  role?: Role;
+  hotelId?: number;
+  isReady?: boolean;
 }
 
 export const userState = atom<userState>({
