@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useCallback } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
   CalendarIcon,
@@ -20,7 +20,12 @@ import {
   PhoneIcon,
   SearchIcon,
 } from "@heroicons/react/solid";
+import tempLogo from "../../public/enset.png";
+import smTempLogo from "../../public/enset-sm.jpg";
 import Link from "next/link";
+import Image from "next/image";
+import axios from "axios";
+import { signOut } from "next-auth/react";
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -39,8 +44,13 @@ const secondaryNavigation = [
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const logout = (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.preventDefault();
+    localStorage.removeItem("recoil-persist");
+    signOut({ callbackUrl: "/login" });
+  };
   return (
-    <div className="z-50">
+    <div className="z-40">
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -91,11 +101,11 @@ const Navbar = () => {
                   </button>
                 </div>
               </Transition.Child>
-              <div className="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
+              <div className="flex-1 h-0 z-50 pt-5 pb-4 overflow-y-auto">
                 <div className="flex-shrink-0 flex items-center px-4">
-                  <img
+                  <Image
                     className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/workflow-mark-pink-500.svg"
+                    src={tempLogo}
                     alt="ENSET Hotels"
                   />
                 </div>
@@ -148,8 +158,11 @@ const Navbar = () => {
                   </div>
                 </nav>
               </div>
-              <div className="flex-shrink-0 flex border-t border-cyan-900 p-4">
-                <a href="#" className="flex-shrink-0 group block">
+              <div className="flex-shrink-0 cursor-pointer flex border-t border-cyan-900 p-4">
+                <a
+                  onClick={(e) => logout(e)}
+                  className="flex-shrink-0 group block"
+                >
                   <div className="flex items-center">
                     <div>
                       <img
@@ -183,10 +196,10 @@ const Navbar = () => {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex-1 flex flex-col min-h-0 border-r  bg-cyan-700">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-              <div className="flex items-center flex-shrink-0 px-4">
-                <img
+              <div className="flex items-center justify-center flex-shrink-0 px-4">
+                <Image
                   className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-logo-pink-500-mark-gray-900-text.svg"
+                  src={tempLogo}
                   alt="ENSET Hotels"
                 />
               </div>
@@ -238,8 +251,11 @@ const Navbar = () => {
                 </div>
               </nav>
             </div>
-            <div className="flex-shrink-0 flex border-t border-cyan-800 p-4">
-              <a href="#" className="flex-shrink-0 w-full group block">
+            <div className="flex-shrink-0 cursor-pointer flex border-t border-cyan-800 p-4">
+              <a
+                onClick={(e) => logout(e)}
+                className="flex-shrink-0 w-full group block"
+              >
                 <div className="flex items-center">
                   <div>
                     <img
@@ -266,9 +282,9 @@ const Navbar = () => {
         <div className="lg:hidden">
           <div className="flex items-center justify-between bg-gray-50 border-b border-gray-200 px-4 py-1.5">
             <div>
-              <img
+              <Image
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/workflow-mark-pink-500.svg"
+                src={smTempLogo}
                 alt="ENSET Hotels"
               />
             </div>

@@ -41,7 +41,7 @@ const Room = (props) => {
     <div>
       <nav
         onClick={props.handleShowRoomList}
-        className="cursor-pointer flex items-start px-4 py-3 sm:px-6 lg:px-8 xl:hidden"
+        className="cursor-pointer flex items-start mt-4 px-4 py-3 sm:px-6 lg:px-8 xl:hidden"
         aria-label="Breadcrumb"
       >
         <a className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
