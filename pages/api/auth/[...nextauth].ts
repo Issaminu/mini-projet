@@ -39,6 +39,28 @@ export const authOptions = {
               delete user.password;
               return user;
             }
+          } else {
+            const user = await prisma.admin.findUnique({
+              where: {
+                email: credentials.email,
+              },
+              select: {
+                id: true,
+                email: true,
+                name: true,
+                password: true,
+              },
+            });
+            if (user) {
+              const match = await bcrypt.compare(
+                credentials.password,
+                user.password
+              );
+              if (match) {
+                delete user.password;
+                return user;
+              }
+            }
           }
           return null;
         } catch (err: any) {
