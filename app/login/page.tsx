@@ -25,7 +25,8 @@ export default function Login(props) {
     setAreInfoValid(true);
     if (session) {
       setUser(session.user);
-      router.push("/dashboard");
+      if (user?.role) router.push("/" + user.role.toLowerCase());
+      else router.push("/admin/hotels");
     }
   }, [session]);
   const handleSubmit = useCallback(

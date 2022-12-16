@@ -33,7 +33,8 @@ export default function Signup() {
     setIsPasswordValid(true);
     if (session) {
       setUser(session.user);
-      router.push("/dashboard");
+      if (user?.role) router.push("/" + user.role.toLowerCase());
+      else router.push("/dashboard");
     }
   }, [session]);
   const handleSubmit = useCallback(
