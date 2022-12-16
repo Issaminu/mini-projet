@@ -19,34 +19,35 @@ model Admin {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(50)
-  email       String   @unique @db.VarChar(60)
-  password    String   @db.VarChar(255)
-  phoneNumber String   @db.VarChar(15)
-  cin         String   @db.VarChar(10)
-  role        Role     @default(MANAGER)
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(50)
+  email       String        @unique @db.VarChar(60)
+  password    String        @db.VarChar(255)
+  phoneNumber String        @db.VarChar(15)
+  cin         String        @db.VarChar(10)
+  role        Role          @default(MANAGER)
   hotelId     Int
-  isReady     Boolean  @default(false)
-  create_time DateTime @default(now())
-  update_time DateTime @default(now())
-  Hotel       Hotel    @relation(fields: [hotelId], references: [id])
+  isReady     Boolean       @default(false)
+  create_time DateTime      @default(now())
+  update_time DateTime      @default(now())
+  Hotel       Hotel         @relation(fields: [hotelId], references: [id])
   Reservation Reservation[]
 
   @@index([hotelId])
 }
+
 enum Role {
   MANAGER
-  RECEPTIONIST
+  RECEPTION
 }
 
 model Hotel {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(50)
-  address     String   @db.VarChar(255)
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(50)
+  address     String     @db.VarChar(255)
   stars       Int
-  create_time DateTime @default(now())
-  update_time DateTime @default(now())
+  create_time DateTime   @default(now())
+  update_time DateTime   @default(now())
   Floor       Floor[]
   Room        Room[]
   User        User[]
@@ -96,6 +97,7 @@ model Room {
   @@index([typeId])
   @@index([hotelId])
 }
+
 enum RoomState {
   EMPTY
   RESERVED
