@@ -14,7 +14,7 @@ const Dashboard = () => {
     if (!session) {
       router.push("/login");
     }
-  });
+  },[]);
   const logout = () => {
     localStorage.removeItem("recoil-persist");
     signOut({ callbackUrl: "/login" });

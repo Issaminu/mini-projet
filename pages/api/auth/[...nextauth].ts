@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../prisma/prisma";
-
+import dotenv from "dotenv";
+dotenv.config();
 const bcrypt = require("bcrypt");
 export const authOptions = {
   providers: [
@@ -57,6 +58,8 @@ export const authOptions = {
                 user.password
               );
               if (match) {
+            
+                
                 delete user.password;
                 return user;
               }
@@ -70,7 +73,7 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET, //process.env.SECRET,
   pages: {
     signIn: "/login",
   },
