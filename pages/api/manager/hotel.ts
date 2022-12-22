@@ -72,6 +72,29 @@ export default async function handler(
           });
         }
 
+        totalRoomTypes.array.forEach((roomType) => {
+          if (!!prisma.roomType.findFirst({ where: { id: roomType.id } })) {
+            prisma.roomType.update({
+              where: {
+                id: roomType.id,
+              },
+              data: {
+                name: roomType.name,
+                price: roomType.price,
+                hotelId: roomType.hotelId,
+              },
+            });
+          } else {
+            prisma.roomType.create({
+              data: {
+                name: roomType.name,
+                price: roomType.price,
+                hotelId: roomType.hotelId,
+              },
+            });
+          }
+        });
+
         res.status(200).json(hotel);
       } catch (error) {
         console.log("Hotel could not be updated");
