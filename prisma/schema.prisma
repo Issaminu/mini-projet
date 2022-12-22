@@ -82,7 +82,7 @@ model RoomType {
 model Room {
   id          Int           @id @default(autoincrement())
   number      Int
-  RoomState   RoomState     @default(EMPTY)
+  roomState   RoomState     @default(EMPTY)
   floorId     Int
   typeId      Int
   hotelId     Int
