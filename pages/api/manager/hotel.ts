@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { id, name, address, stars } = req.body;
+  const { id, name, address, stars, totalFloors, totalRoomTypes } = req.body;
 
   switch (req.method) {
     case "GET":
@@ -14,7 +14,7 @@ export default async function handler(
           where: { id: Number(id) },
         });
 
-        const totalRooms = await prisma.room.aggregate({
+        const numberRooms = await prisma.room.aggregate({
           _count: {
             id: true,
           },
@@ -23,7 +23,7 @@ export default async function handler(
           },
         });
 
-        const totalFloors = await prisma.floor.aggregate({
+        const numberFloors = await prisma.floor.aggregate({
           _count: {
             id: true,
           },
@@ -38,9 +38,9 @@ export default async function handler(
           },
         });
 
-        res.json([hotel, totalRooms, totalFloors, roomTypes]);
+        res.json([hotel, numberRooms, numberFloors, roomTypes]);
       } catch (error) {
-        console.log("hotel could not be found");
+        console.log("Hotel could not be found");
       }
       break;
 
@@ -55,9 +55,26 @@ export default async function handler(
           },
         });
 
-        res.json(hotel);
+        const numberFloors = await prisma.floor.aggregate({
+          _count: {
+            id: true,
+          },
+          where: {
+            hotelId: Number(id),
+          },
+        });
+        for (let i = Number(numberFloors) + 1; i <= Number(totalFloors); i++) {
+          await prisma.floor.create({
+            data: {
+              number: i,
+              hotelId: id,
+            },
+          });
+        }
+
+        res.status(200).json(hotel);
       } catch (error) {
-        console.log("hotel could not be updated");
+        console.log("Hotel could not be updated");
       }
       break;
 
