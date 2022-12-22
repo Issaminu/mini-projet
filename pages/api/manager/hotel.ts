@@ -10,7 +10,7 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        const hotel = await prisma.hotel.findUnique({
+        const hotel = await prisma.hotel.findFirst({
           where: { id: Number(id) },
         });
 
@@ -76,7 +76,7 @@ export default async function handler(
           if (!!prisma.roomType.findFirst({ where: { id: roomType.id } })) {
             prisma.roomType.update({
               where: {
-                id: roomType.id,
+                id: Number(roomType.id),
               },
               data: {
                 name: roomType.name,

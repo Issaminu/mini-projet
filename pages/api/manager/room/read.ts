@@ -10,7 +10,7 @@ export default async function handler(
   try {
     const rooms = await prisma.room.findMany({
       where: {
-        hotelId: hotelId,
+        hotelId: Number(hotelId),
       },
     });
 

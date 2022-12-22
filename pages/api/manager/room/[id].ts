@@ -10,10 +10,15 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       try {
-        const room = await prisma.room.findUnique({
+        const room = await prisma.room.findFirst({
           where: { id: Number(roomId) },
         });
-        res.json(room);
+
+        const reservations = await prisma.reservation.findMany({
+          where: { roomId: Number(roomId) },
+        });
+
+        res.status(200).json([room, reservations]);
       } catch (error) {
         console.log("Room could not be found");
       }
@@ -22,6 +27,7 @@ export default async function handler(
     case "POST":
       try {
         const { number, floorId, typeId, hotelId } = req.body;
+
         const room = await prisma.room.update({
           where: { id: Number(roomId) },
           data: {
@@ -31,6 +37,7 @@ export default async function handler(
             hotelId: hotelId,
           },
         });
+
         res.json(room);
       } catch (error) {
         console.log("Room could not be updated");
@@ -42,6 +49,7 @@ export default async function handler(
         const room = await prisma.room.delete({
           where: { id: Number(roomId) },
         });
+
         res.json(room);
       } catch (error) {
         console.log("Room could not be deleted");

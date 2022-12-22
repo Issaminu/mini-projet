@@ -22,6 +22,7 @@ export default async function handler(
         isReady: true,
       },
     });
+
     res.status(200).json(user);
   } catch (error) {
     console.log("User Creation Failed");

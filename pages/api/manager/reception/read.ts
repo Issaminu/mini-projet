@@ -11,7 +11,7 @@ export default async function handler(
   try {
     const users = await prisma.user.findMany({
       where: {
-        hotelId: hotelId,
+        hotelId: Number(hotelId),
         role: Role.RECEPTION,
       },
     });

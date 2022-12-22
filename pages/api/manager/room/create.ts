@@ -16,6 +16,7 @@ export default async function handler(
         hotelId: hotelId,
       },
     });
+
     res.status(200).json(room);
   } catch (error) {
     console.log("Room Creation Failed");
