@@ -13,7 +13,32 @@ export default async function handler(
         const hotel = await prisma.hotel.findUnique({
           where: { id: Number(id) },
         });
-        res.json(hotel);
+
+        const totalRooms = await prisma.room.aggregate({
+          _count: {
+            id: true,
+          },
+          where: {
+            hotelId: Number(id),
+          },
+        });
+
+        const totalFloors = await prisma.floor.aggregate({
+          _count: {
+            id: true,
+          },
+          where: {
+            hotelId: Number(id),
+          },
+        });
+
+        const roomTypes = await prisma.roomType.findMany({
+          where: {
+            hotelId: Number(id),
+          },
+        });
+
+        res.json([hotel, totalRooms, totalFloors, roomTypes]);
       } catch (error) {
         console.log("hotel could not be found");
       }
@@ -29,6 +54,7 @@ export default async function handler(
             stars,
           },
         });
+
         res.json(hotel);
       } catch (error) {
         console.log("hotel could not be updated");
