@@ -25,10 +25,10 @@ export default async function handler(
         const room = await prisma.room.update({
           where: { id: Number(roomId) },
           data: {
-            number,
-            floorId,
-            typeId,
-            hotelId,
+            number: number,
+            floorId: floorId,
+            typeId: typeId,
+            hotelId: hotelId,
           },
         });
         res.json(room);

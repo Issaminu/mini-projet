@@ -1,23 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../../prisma/prisma";
+import { Role } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { number, floorId, typeId, hotelId } = req.body;
+  const { hotelId } = req.body;
 
   try {
-    const room = await prisma.room.create({
-      data: {
-        number: number,
-        floorId: floorId,
-        typeId: typeId,
+    const users = await prisma.user.findMany({
+      where: {
         hotelId: hotelId,
+        role: Role.RECEPTION,
       },
     });
-    res.status(200).json(room);
+
+    res.status(200).json(users);
   } catch (error) {
-    console.log("Room Creation Failed");
+    console.log("Users could not be found");
   }
 }

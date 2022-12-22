@@ -5,8 +5,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const { hotelId } = req.body;
+
   try {
-    const rooms = await prisma.room.findMany();
+    const rooms = await prisma.room.findMany({
+      where: {
+        hotelId: hotelId,
+      },
+    });
+
     res.status(200).json(rooms);
   } catch (error) {
     console.log("Rooms could not be found");
