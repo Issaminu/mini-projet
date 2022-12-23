@@ -1,51 +1,36 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { Admin, User } from "@prisma/client";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-type UserOrAdmin = User | Admin;
-const isUser = (toBeDetermined: UserOrAdmin): toBeDetermined is User => {
-  if ((toBeDetermined as User).role) return true;
-  else return false;
-};
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
+    const user = request.nextauth.token.user;
+    const pathname = request.nextUrl.pathname;
+    const url = request.url;
     //Checking user role against the `/admin` route
-    if (
-      request.nextUrl.pathname.startsWith("/admin") &&
-      isUser(request.nextauth.token.user)
-    ) {
-      if (request.nextauth.token.user.role == "MANAGER") {
-        return NextResponse.redirect(new URL("/manager", request.url));
+    if (pathname.startsWith("/admin") && user.role != "ADMIN") {
+      if (user.role == "MANAGER") {
+        return NextResponse.redirect(new URL("/manager", url));
       } else {
-        return NextResponse.redirect(new URL("/reception", request.url));
+        return NextResponse.redirect(new URL("/reception", url));
       }
     }
 
     //Checking user role against the `/manager` route
-    else if (
-      request.nextUrl.pathname.startsWith("/manager") &&
-      (!isUser(request.nextauth.token.user) ||
-        request.nextauth.token.user.role != "MANAGER")
-    ) {
-      if (!isUser(request.nextauth.token.user)) {
-        return NextResponse.redirect(new URL("/admin/hotels", request.url));
+    else if (pathname.startsWith("/manager") && user.role != "MANAGER") {
+      if (user.role == "ADMIN") {
+        return NextResponse.redirect(new URL("/admin/hotels", url));
       } else {
-        return NextResponse.redirect(new URL("/reception", request.url));
+        return NextResponse.redirect(new URL("/reception", url));
       }
     }
 
     //Checking user role against the `/reception` route
-    else if (
-      request.nextUrl.pathname.startsWith("/reception") &&
-      (!isUser(request.nextauth.token.user) ||
-        request.nextauth.token.user.role != "RECEPTION")
-    ) {
-      if (!isUser(request.nextauth.token.user)) {
-        return NextResponse.redirect(new URL("/admin/hotels", request.url));
+    else if (pathname.startsWith("/reception") && user.role != "RECEPTION") {
+      if (user.role == "ADMIN") {
+        return NextResponse.redirect(new URL("/admin/hotels", url));
       } else {
-        return NextResponse.redirect(new URL("/manager", request.url));
+        return NextResponse.redirect(new URL("/manager", url));
       }
     }
   },
