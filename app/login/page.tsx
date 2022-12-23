@@ -25,7 +25,7 @@ export default function Login(props) {
     setAreInfoValid(true);
     if (session) {
       setUser(session.user);
-      if (user?.role) router.push("/" + user.role.toLowerCase());
+      if (user.role) router.push("/" + user.role.toLowerCase());
       else router.push("/admin/hotels");
     }
   }, [session]);
