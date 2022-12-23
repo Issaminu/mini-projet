@@ -1,8 +1,7 @@
+import { Admin, Role } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../prisma/prisma";
-import dotenv from "dotenv";
-dotenv.config();
 const bcrypt = require("bcrypt");
 export const authOptions = {
   providers: [
@@ -50,6 +49,7 @@ export const authOptions = {
                 email: true,
                 name: true,
                 password: true,
+                role: true,
               },
             });
             if (user) {
@@ -58,8 +58,6 @@ export const authOptions = {
                 user.password
               );
               if (match) {
-            
-                
                 delete user.password;
                 return user;
               }

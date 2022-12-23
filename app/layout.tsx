@@ -7,7 +7,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
-        <title> Mini Projet - ENSET Mohammmedia</title>
+        <title> Mini Projet - ENSET Mohammedia</title>
       </head>
       <body className={inter.className}>
         <Providers>{children}</Providers>

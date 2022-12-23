@@ -1,27 +1,18 @@
-import { Role } from "@prisma/client";
+import { Admin, User } from "@prisma/client";
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-export interface userState {
-  id?: number;
-  email?: string;
-  name?: string;
-  password?: string;
-  phoneNumber?: string;
-  cin?: string;
-  role?: Role;
-  hotelId?: number;
-  isReady?: boolean;
-}
+export type UserType = User | Admin | Partial<Admin> | Partial<User>;
 
-export const userState = atom<userState>({
+export const userState = atom<UserType>({
   key: "userState",
   default: {
     id: 0,
     email: "",
     name: "",
+    role: "",
   },
   effects_UNSTABLE: [persistAtom],
 });
