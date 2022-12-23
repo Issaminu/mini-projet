@@ -36,12 +36,12 @@ const user = {
 };
 const navigation = [
   { name: "Rooms", href: "/manager/romms", icon: HomeIcon, current: true },
-  { name: "Managers", href: "#", icon: UserGroupIcon, current: false },
-  {name:"Reservations",href:"/manager/reservations",icon:CalendarIcon,current:false},
+  { name: "Managers", href: "manager", icon: UserGroupIcon, current: false },
+  {name:"Reservations",href:"/manager/reservation",icon:CalendarIcon,current:false},
     {name:"Hotel",href:"/manager/hotel",icon:ViewGridAddIcon,current:false},
 ];
 const secondaryNavigation = [
-  { name: "Profile", href: "#", icon: UserIcon, current: false },
+  { name: "Profile", href: "/manager/profile", icon: UserIcon, current: false },
 ];
 
 const Navbar = () => {
