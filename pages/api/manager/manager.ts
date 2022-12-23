@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   // this const stores the logged in user's id which comes from react
-  const { userId } = req.body;
+  const { userId, name, email, password, phoneNumber, cin, hotelId } = req.body;
 
   // instead of creating multiple pages for each method, we can use a switch case to do it in one
   switch (req.method) {
@@ -33,8 +33,6 @@ export default async function handler(
     // if the method is POST (updating data)
     case "POST":
       try {
-        // store the comming data from the form in this const object
-        const { name, email, password, phoneNumber, cin, hotelId } = req.body;
         // then update the row of this user with the info
         const user = await prisma.user.update({
           where: {
