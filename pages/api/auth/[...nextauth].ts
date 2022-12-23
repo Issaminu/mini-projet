@@ -1,3 +1,4 @@
+import { Admin, Role } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../prisma/prisma";
@@ -48,6 +49,7 @@ export const authOptions = {
                 email: true,
                 name: true,
                 password: true,
+                role: true,
               },
             });
             if (user) {

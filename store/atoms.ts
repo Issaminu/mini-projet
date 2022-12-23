@@ -1,10 +1,10 @@
-import { User } from "@prisma/client";
+import { Admin, User } from "@prisma/client";
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-export type UserType = User | Partial<User>;
+export type UserType = User | Admin | Partial<Admin> | Partial<User>;
 
 export const userState = atom<UserType>({
   key: "userState",

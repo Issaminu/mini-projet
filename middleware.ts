@@ -2,19 +2,13 @@ import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 import { Admin, User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-type UserOrAdmin = User | Admin;
-const isUser = (toBeDetermined: UserOrAdmin): toBeDetermined is User => {
-  if ((toBeDetermined as User).role) return true;
-  else return false;
-};
-
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
     const user = request.nextauth.token.user;
     const pathname = request.nextUrl.pathname;
     const url = request.url;
     //Checking user role against the `/admin` route
-    if (pathname.startsWith("/admin") && isUser(user)) {
+    if (pathname.startsWith("/admin") && user.role != "ADMIN") {
       if (user.role == "MANAGER") {
         return NextResponse.redirect(new URL("/manager", url));
       } else {
@@ -23,11 +17,8 @@ export default withAuth(
     }
 
     //Checking user role against the `/manager` route
-    else if (
-      pathname.startsWith("/manager") &&
-      (!isUser(user) || user.role != "MANAGER")
-    ) {
-      if (!isUser(user)) {
+    else if (pathname.startsWith("/manager") && user.role != "MANAGER") {
+      if (user.role == "ADMIN") {
         return NextResponse.redirect(new URL("/admin/hotels", url));
       } else {
         return NextResponse.redirect(new URL("/reception", url));
@@ -35,11 +26,8 @@ export default withAuth(
     }
 
     //Checking user role against the `/reception` route
-    else if (
-      pathname.startsWith("/reception") &&
-      (!isUser(user) || user.role != "RECEPTION")
-    ) {
-      if (!isUser(user)) {
+    else if (pathname.startsWith("/reception") && user.role != "RECEPTION") {
+      if (user.role == "ADMIN") {
         return NextResponse.redirect(new URL("/admin/hotels", url));
       } else {
         return NextResponse.redirect(new URL("/manager", url));
