@@ -13,7 +13,7 @@ export default async function handler(
     // if the method is GET (display of data)
     case "GET":
       try {
-        // Store the info of the requested user in the "hotel" const using the id
+        // Store the info of the requested "hotel" in a const using the id
         const hotel = await prisma.hotel.findFirst({
           where: { id: Number(id) },
         });
