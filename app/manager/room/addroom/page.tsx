@@ -1,9 +1,9 @@
-'use client';
-import { useEffect, useRef, useCallback, useState } from 'react';
-import axios from 'axios';
-import { userState } from '../../../../store/atoms';
-import { useRecoilState } from 'recoil';
-import { User } from '@prisma/client';
+"use client";
+import { useEffect, useRef, useCallback, useState } from "react";
+import axios from "axios";
+import { userState } from "../../../../store/atoms";
+import { useRecoilState } from "recoil";
+import { User } from "@prisma/client";
 
 export default function page() {
   const [user, setUser] = useRecoilState(userState);
@@ -14,14 +14,14 @@ export default function page() {
   const roomFloor = useRef(null);
   const createRoom = useCallback(async () => {
     axios
-      .post('/api/manager/room/create', {
+      .post("/api/manager/room/create", {
         hotelId: user.hotelId,
         floorId: roomFloor.current.value,
         number: roomNumber.current.value,
         typeId: roomType.current.value,
       })
       .then((res) => {
-        console.log('succefully created');
+        console.log("Succefully created");
         console.log(res.data);
       })
       .catch((err) => {
@@ -79,7 +79,7 @@ export default function page() {
                   htmlFor="roomFloor"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Room Floor{' '}
+                  Room Floor{" "}
                 </label>
                 <div className="mt-1">
                   <input
@@ -96,7 +96,7 @@ export default function page() {
                   htmlFor="roomType"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Room Type{' '}
+                  Room Type{" "}
                 </label>
                 <div className="mt-1">
                   <input

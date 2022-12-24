@@ -17,7 +17,6 @@ const page = () => {
   const password = useRef(null);
   const verifypassword = useRef(null);
   const phoneNumber = useRef(null);
-
   const getProfileInfo = useCallback(async () => {
     await axios
       .get('/api/manager/manager')
