@@ -4,10 +4,21 @@ import { recoilPersist } from "recoil-persist";
 
 const { persistAtom } = recoilPersist();
 
-export type UserType = User | Admin | Partial<Admin> | Partial<User>;
+export type UserType = User  | Partial<User>;
+export type AdminType =   Admin | Partial<Admin> ;
 
 export const userState = atom<UserType>({
   key: "userState",
+  default: {
+    id: 0,
+    email: "",
+    name: "",
+    role: "MANAGER",
+  },
+  effects_UNSTABLE: [persistAtom],
+});
+export const adminState = atom<AdminType>({
+  key: "adminState",
   default: {
     id: 0,
     email: "",

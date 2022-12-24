@@ -3,6 +3,8 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import axios from 'axios';
 import { userState } from '../../../../store/atoms';
 import { useRecoilState } from 'recoil';
+import { User } from '@prisma/client';
+
 export default function page() {
   const [user, setUser] = useRecoilState(userState);
   const [hotelData, setHotelData] = useState(null);
