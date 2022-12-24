@@ -37,7 +37,7 @@ const page = () => {
   }, []);
   const updateProfileInfo = useCallback(async () => {
     if (password.current.value != verifypassword.current.value) {
-      alert("passwords are not the same");
+      alert("Passwords are not the same");
       return;
     }
     await axios
@@ -120,9 +120,9 @@ const page = () => {
                   </label>
                   <input
                     type="password"
-                    name="email-address"
-                    id="email-address"
-                    autoComplete="email"
+                    name="password"
+                    id="password"
+                    autoComplete="password"
                     ref={password}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -135,10 +135,10 @@ const page = () => {
                     Verify Password
                   </label>
                   <input
-                    type="text"
-                    name="email-address"
-                    id="email-address"
-                    autoComplete="email"
+                    type="password"
+                    name="verify-password"
+                    id="verify-password"
+                    autoComplete="verify-password"
                     ref={verifypassword}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -153,9 +153,9 @@ const page = () => {
                   </label>
                   <input
                     type="tel"
-                    name="phone number"
-                    id="expiration-date"
-                    autoComplete="cc-exp"
+                    name="phone-number"
+                    id="phone-number"
+                    autoComplete="phone-number"
                     ref={phoneNumber}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                     placeholder="06488854"
