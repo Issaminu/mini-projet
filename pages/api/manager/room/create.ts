@@ -24,8 +24,6 @@ export default async function handler(
     res.status(200).json(room);
   } catch (error) {
     // if there's an error, log it.
-      console.log(error);
-
     console.log("Room Creation Failed");
   }
 }

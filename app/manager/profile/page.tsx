@@ -1,20 +1,7 @@
 "use client"
 import React, { useCallback, useEffect,useRef } from 'react'
-import { Fragment ,useState} from 'react'
-import { Disclosure, Menu, Switch, Transition } from '@headlessui/react'
-import { SearchIcon ,QuestionMarkCircleIcon} from '@heroicons/react/solid'
-import {
-  BellIcon,
-  CogIcon,
-  CreditCardIcon,
-  KeyIcon,
-  MenuIcon,
-  UserCircleIcon,
-  ViewGridAddIcon,
-  XIcon,
-} from '@heroicons/react/outline'
+
 import axios from 'axios'
-import Email from 'next-auth/providers/email'
  
 
  

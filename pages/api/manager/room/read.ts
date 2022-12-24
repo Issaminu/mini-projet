@@ -18,7 +18,9 @@ export default async function handler(
     });
 
     // then we send the rooms as an array of objects
+    if(rooms.length === 0) return res.status(400).json({message: "No rooms found"})
     res.status(200).json(rooms);
+
   } catch (error) {
     console.log("Rooms could not be found");
   }
