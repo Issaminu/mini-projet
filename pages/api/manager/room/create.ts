@@ -11,18 +11,21 @@ export default async function handler(
 
   try {
     // then we simply insert the new room to the DB
+    if(!number || !floorId || !typeId || !hotelId) return res.status(400).json({message: "Missing data"});
     const room = await prisma.room.create({
       data: {
-        number: number,
-        floorId: floorId,
-        typeId: typeId,
-        hotelId: hotelId,
+        number: Number(number),
+        floorId: Number(floorId),
+        typeId: Number(typeId),
+        hotelId: Number(hotelId),
       },
     });
 
     res.status(200).json(room);
   } catch (error) {
     // if there's an error, log it.
+      console.log(error);
+
     console.log("Room Creation Failed");
   }
 }
