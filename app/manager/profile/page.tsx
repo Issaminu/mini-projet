@@ -89,7 +89,7 @@ const page = () => {
                     type="text"
                     name="name"
                     id="name"
-                    autoComplete="cc-given-name"
+                    autoComplete="off"
                     ref={name}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -105,7 +105,7 @@ const page = () => {
                     type="text"
                     name="email-address"
                     id="email-address"
-                    autoComplete="email"
+                    autoComplete="off"
                     ref={email}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -122,7 +122,7 @@ const page = () => {
                     type="password"
                     name="password"
                     id="password"
-                    autoComplete="password"
+                    autoComplete="off"
                     ref={password}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -135,10 +135,10 @@ const page = () => {
                     Verify Password
                   </label>
                   <input
-                    type="text"
+                    type="password"
                     name="verify-password"
                     id="verify-password"
-                    autoComplete="verify-password"
+                    autoComplete="off"
                     ref={verifypassword}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -155,7 +155,7 @@ const page = () => {
                     type="text"
                     name="phone-number"
                     id="phone-number"
-                    autoComplete="phone-number"
+                    autoComplete="off"
                     ref={phoneNumber}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                     placeholder="0615839642"
@@ -173,7 +173,7 @@ const page = () => {
                     type="text"
                     name="cin"
                     id="cin"
-                    autoComplete="cin"
+                    autoComplete="off"
                     ref={cin}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
