@@ -1,11 +1,18 @@
 import { Floor } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
+import { getToken } from "next-auth/jwt";
 import prisma from "../../../prisma/prisma";
+import { NextRequestWithAuth } from "next-auth/middleware";
 
 export default async function hotelsAPI(
-  req: NextApiRequest,
+  req: NextApiRequest & NextRequestWithAuth,
   res: NextApiResponse
 ) {
+  const token = await getToken({ req });
+  if (token.user.role !== "admin") {
+    res.status(401).send({ message: "Unauthorized" });
+    return;
+  }
   switch (req.method) {
     case "PUT":
       try {
