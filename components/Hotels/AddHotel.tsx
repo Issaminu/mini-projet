@@ -125,12 +125,15 @@ export default function AddHotel() {
       roomTypes: roomTypePrice,
       floors: floors,
     };
+    setAreInputsValid(false);
     await axios
       .put("/api/admin/hotels", hotel)
       .then((res) => {
+        setAreInputsValid(true);
         router.push("/admin/hotels");
       })
       .catch((err) => {
+        setAreInputsValid(true);
         console.log(err);
       });
   }, [name, address, floors, roomTypePrice, roomCount, starCount]);
@@ -409,7 +412,7 @@ export default function AddHotel() {
                         className={
                           areInputsValid
                             ? "ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600"
-                            : "disabled ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400  focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            : "disabled ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-100"
                         }
                       >
                         Save
