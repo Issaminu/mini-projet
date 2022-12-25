@@ -53,6 +53,7 @@ model Hotel {
   Room        Room[]
   User        User[]
   RoomType    RoomType[]
+  Reservation Reservation[]
 }
 
 model Floor {
@@ -121,6 +122,7 @@ model Reservation {
   clientId    Int
   userId      Int
   roomId      Int
+  hotelId     Int
   checkIn     DateTime
   checkOut    DateTime
   create_time DateTime @default(now())
@@ -128,8 +130,10 @@ model Reservation {
   client      Client   @relation(fields: [clientId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
   room        Room     @relation(fields: [roomId], references: [id])
+  hotel       Hotel    @relation(fields: [hotelId], references: [id])
 
   @@index([clientId])
   @@index([userId])
   @@index([roomId])
+  @@index([hotelId])
 }
