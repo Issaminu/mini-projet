@@ -13,8 +13,8 @@ export default function Example() {
   const [rooms, setRooms] = useState([
     {
       id: null,
-      floorId: null,
       number: null,
+      floorId: null,
       typeId: null,
     },
   ]);
@@ -78,13 +78,13 @@ export default function Example() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Status
+                      Type
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      Type
+                      Status
                     </th>
                     <th
                       scope="col"
