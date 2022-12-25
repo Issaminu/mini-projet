@@ -1,15 +1,15 @@
-'use client';
-import React, { useCallback, useEffect, useRef } from 'react';
+"use client";
+import React, { useCallback, useEffect, useRef } from "react";
 
-import axios from 'axios';
+import axios from "axios";
 
 const page = () => {
   const user = useRef({
-    name: '',
-    email: '',
-    phone: '',
-    cin: '',
-    phoneNumber: '',
+    name: "",
+    email: "",
+    phone: "",
+    cin: "",
+    phoneNumber: "",
   });
   const name = useRef(null);
   const email = useRef(null);
@@ -19,7 +19,7 @@ const page = () => {
   const phoneNumber = useRef(null);
   const getProfileInfo = useCallback(async () => {
     await axios
-      .get('/api/manager/manager')
+      .get("/api/manager/manager")
       .then((res) => {
         user.current.name = res.data.user.name;
         user.current.email = res.data.user.email;
@@ -37,11 +37,11 @@ const page = () => {
   }, []);
   const updateProfileInfo = useCallback(async () => {
     if (password.current.value != verifypassword.current.value) {
-      alert('passwords are not the same');
+      alert("passwords are not the same");
       return;
     }
     await axios
-      .post('/api/manager/manager', {
+      .post("/api/manager/manager", {
         name: name.current.value,
         email: email.current.value,
         cin: cin.current.value,
@@ -80,15 +80,15 @@ const page = () => {
               <div className="mt-6 grid grid-cols-4 gap-6">
                 <div className="col-span-4 sm:col-span-2">
                   <label
-                    htmlFor="first-name"
+                    htmlFor="name"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    First name
+                    Name
                   </label>
                   <input
                     type="text"
-                    name="first-name"
-                    id="first-name"
+                    name="name"
+                    id="name"
                     autoComplete="cc-given-name"
                     ref={name}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
@@ -120,25 +120,25 @@ const page = () => {
                   </label>
                   <input
                     type="password"
-                    name="email-address"
-                    id="email-address"
-                    autoComplete="email"
+                    name="password"
+                    id="password"
+                    autoComplete="password"
                     ref={password}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
                 </div>
                 <div className="col-span-4 sm:col-span-2">
                   <label
-                    htmlFor="email-address"
+                    htmlFor="verify-password"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Verify Password
                   </label>
                   <input
                     type="text"
-                    name="email-address"
-                    id="email-address"
-                    autoComplete="email"
+                    name="verify-password"
+                    id="verify-password"
+                    autoComplete="verify-password"
                     ref={verifypassword}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
@@ -146,19 +146,19 @@ const page = () => {
 
                 <div className="col-span-4 sm:col-span-1">
                   <label
-                    htmlFor="phone number"
+                    htmlFor="phone-number"
                     className="block text-sm font-medium text-gray-700"
                   >
                     Phone Number
                   </label>
                   <input
-                    type="tel"
-                    name="phone number"
-                    id="expiration-date"
-                    autoComplete="cc-exp"
+                    type="text"
+                    name="phone-number"
+                    id="phone-number"
+                    autoComplete="phone-number"
                     ref={phoneNumber}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
-                    placeholder="06488854"
+                    placeholder="0615839642"
                   />
                 </div>
 
@@ -172,8 +172,8 @@ const page = () => {
                   <input
                     type="text"
                     name="cin"
-                    id="security-code"
-                    autoComplete="cc-csc"
+                    id="cin"
+                    autoComplete="cin"
                     ref={cin}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-900 focus:border-gray-900 sm:text-sm"
                   />
