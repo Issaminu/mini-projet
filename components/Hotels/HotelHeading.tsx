@@ -1,6 +1,6 @@
 export default function HotelHeading() {
   return (
-    <div className="md:flex md:items-center h-32 w-full px-8 md:justify-between">
+    <div className="md:flex md:items-center h-24 lg:h-32 w-full px-8 md:justify-between mt-8">
       <div className="flex-1 min-w-0">
         <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
           New Hotel

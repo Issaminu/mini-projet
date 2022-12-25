@@ -42,7 +42,7 @@ export default function Signup() {
       e.preventDefault();
       setIsLoading(true);
       ref.current.staticStart();
-      axios
+      await axios
         .post("/api/auth/signup", {
           email: email.current.value,
           name: name.current.value,

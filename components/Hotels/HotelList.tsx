@@ -8,7 +8,6 @@ import {
   PhoneIcon,
   SearchIcon,
 } from "@heroicons/react/solid";
-import Navbar from "../Navbar/AdminNavbar";
 import Hotel from "./Hotel";
 import Link from "next/link";
 const directory = [
@@ -211,8 +210,8 @@ const Hotels = (props) => {
     setRoomListOpen(true);
     setRoomOpen(false);
   }, [roomOpen, roomListOpen]);
-  console.log("heere is a list of hotels: ");
-  console.log(props.myRooms);
+  // console.log("here is a list of hotels: ");
+  // console.log(props.myRooms);
   const handleSearch = useCallback(
     (e) => {
       const query = e.target.value;

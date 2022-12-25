@@ -10,3 +10,14 @@ body {
   height: 100%;
   overflow-x: hidden;
 }
+
+.rti--input:focus {
+  box-shadow: none;
+  width: 12rem !important;
+  outline: 0px;
+}
+
+.rti--input {
+  height: auto !important;
+  width: fit-content !important;
+}

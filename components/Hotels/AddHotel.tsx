@@ -1,5 +1,140 @@
+"use client";
 import HotelHeading from "./HotelHeading";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { TagsInput } from "react-tag-input-component";
+import { Tab } from "@headlessui/react";
+import Link from "next/link";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const stars = [0, 1, 2, 3, 4, 5];
+const starterFloors = [
+  { name: "1", roomType: "Normal" },
+  { name: "2", roomType: "Normal" },
+  { name: "3", roomType: "Normal" },
+  { name: "4", roomType: "Normal" },
+  { name: "5", roomType: "Normal" },
+];
+const starterRoomTypePrices = [
+  { name: "Normal", price: 1 },
+  { name: "Premium", price: 1 },
+  { name: "Presidential", price: 1 },
+];
+const starterRoomTypes = ["Normal", "Premium", "Presidential"];
+
 export default function AddHotel() {
+  const router = useRouter();
+  const [starCount, setStarCount] = useState(0);
+  const [floors, setFloors] = useState(starterFloors);
+  const [floorCount, setFloorCount] = useState(5);
+  const [selected, setSelected] = useState(starterRoomTypes);
+  const [roomCount, setRoomCount] = useState(1);
+  const [roomTypePrice, setRoomTypePrice] = useState(starterRoomTypePrices);
+  const [areInputsValid, setAreInputsValid] = useState(false);
+  const [address, setAddress] = useState("");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (
+      name.length > 0 &&
+      floorCount > 0 &&
+      roomTypePrice.length > 0 &&
+      address.length > 0 &&
+      roomCount > 0 &&
+      (starCount >= 0 || starCount <= 5)
+    ) {
+      setAreInputsValid(true);
+    } else {
+      setAreInputsValid(false);
+    }
+  }, [name, address, floors, roomTypePrice, roomCount, starCount]);
+  const handleFloorsChange = useCallback(
+    (e) => {
+      e.target.value = parseInt(e.target.value);
+      if (e.target.value < 1) e.target.value = 1;
+      if (e.target.value > 100) e.target.value = 100;
+      setFloorCount(parseInt(e.target.value));
+      let tempFloors = [...floors];
+      for (let i = 0; i < e.target.value; i++) {
+        if (!tempFloors[i])
+          tempFloors[i] = {
+            name: String(i + 1),
+            roomType: "Normal",
+          };
+      }
+      tempFloors = tempFloors.slice(0, e.target.value);
+      setFloors(tempFloors);
+    },
+    [floors, floorCount]
+  );
+
+  const handleChangePrice = useCallback(
+    (e, index) => {
+      e.target.value = parseFloat(e.target.value).toFixed(2);
+      if (e.target.value < 1) e.target.value = 1;
+      let tempPrice = e.target.value;
+      let tempRoomTypePrice = [...roomTypePrice];
+      for (let i = 0; i < selected.length; i++) {
+        if (!tempRoomTypePrice[index]) {
+          tempRoomTypePrice[index] = {
+            name: selected[index],
+            price: 0,
+          };
+        }
+      }
+      tempRoomTypePrice[index].price = e.target.value;
+      setRoomTypePrice(tempRoomTypePrice);
+    },
+    [selected, roomTypePrice]
+  );
+
+  const handleChangeFloorType = useCallback(
+    (e, index) => {
+      let tempFloors = [...floors];
+      tempFloors[index].roomType = e.target.value;
+      setFloors(tempFloors);
+    },
+    [floors]
+  );
+
+  const handleRoomCountChange = useCallback(
+    (e) => {
+      e.target.value = parseInt(e.target.value);
+      if (e.target.value < 1) e.target.value = 1;
+      if (e.target.value > 100) e.target.value = 100;
+      setRoomCount(e.target.value);
+    },
+    [roomCount]
+  );
+  const handleSubmit = useCallback(async () => {
+    let capitalizedName = name;
+    capitalizedName =
+      capitalizedName.charAt(0).toUpperCase() + capitalizedName.slice(1);
+    let capitalizedAddress = address;
+    capitalizedAddress =
+      capitalizedAddress.charAt(0).toUpperCase() + capitalizedAddress.slice(1);
+    let hotel = {
+      name: capitalizedName,
+      address: capitalizedAddress,
+      starCount: starCount,
+      roomCount: roomCount,
+      roomTypes: roomTypePrice,
+      floors: floors,
+    };
+    await axios
+      .put("/api/admin/hotels", hotel)
+      .then((res) => {
+        router.push("/admin/hotels");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [name, address, floors, roomTypePrice, roomCount, starCount]);
+
   return (
     <div className="flex flex-col">
       <HotelHeading />
@@ -9,467 +144,280 @@ export default function AddHotel() {
             <div className="md:col-span-1">
               <div className="px-4 sm:px-0">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Profile
+                  Hotel Information
                 </h3>
                 <p className="mt-1 text-sm text-gray-600">
-                  This information will be displayed publicly so be careful what
-                  you share.
+                  General information on the hotel.
                 </p>
               </div>
             </div>
-            <div className="mt-5 md:mt-0 md:col-span-2">
-              <form action="#" method="POST">
-                <div className="shadow sm:rounded-md sm:overflow-hidden">
-                  <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                    <div className="grid grid-cols-3 gap-6">
-                      <div className="col-span-3 sm:col-span-2">
-                        <label
-                          htmlFor="company-website"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Website
-                        </label>
-                        <div className="mt-1 flex rounded-md shadow-sm">
-                          <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                            http://
-                          </span>
-                          <input
-                            type="text"
-                            name="company-website"
-                            id="company-website"
-                            className="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300"
-                            placeholder="www.example.com"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
+            <div
+              style={{ maxWidth: "64rem" }}
+              className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0"
+            >
+              <div className="sm:overflow-hidden rounded-t-lg rounded-b-lg lg:rounded-b-none">
+                <div className="px-4 py-5 bg-white space-y-6 sm:p-6 lg:pb-0">
+                  <div className="flex flex-row gap-6">
+                    <div className="w-full">
                       <label
-                        htmlFor="about"
+                        htmlFor="name"
                         className="block text-sm font-medium text-gray-700"
                       >
-                        About
+                        Hotel name
                       </label>
-                      <div className="mt-1">
-                        <textarea
-                          id="about"
-                          name="about"
-                          rows={3}
-                          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                          placeholder="you@example.com"
-                          defaultValue={""}
-                        />
-                      </div>
-                      <p className="mt-2 text-sm text-gray-500">
-                        Brief description for your profile. URLs are
-                        hyperlinked.
-                      </p>
+                      <input
+                        onChange={(e) => setName(e.target.value)}
+                        type="text"
+                        name="name"
+                        id="name"
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      />
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Photo
+                    <div className="w-fit max-w-md px-2 sm:px-0">
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Number of stars
                       </label>
-                      <div className="mt-1 flex items-center">
-                        <span className="inline-block h-12 w-12 rounded-full overflow-hidden bg-gray-100">
-                          <svg
-                            className="h-full w-full text-gray-300"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
+                      <div id="starCount" className="mt-1">
+                        <Tab.Group
+                          onChange={(index) => {
+                            setStarCount(index);
+                          }}
+                        >
+                          <Tab.List className="flex h-9 space-x-1  rounded-md bg-gray-200 p-1">
+                            {Object.keys(stars).map((star) => (
+                              <Tab
+                                key={star}
+                                className={({ selected }) =>
+                                  classNames(
+                                    "w-8 rounded-md text-sm font-medium leading-5 text-gray-600",
+                                    "w-8 ring-white ring-opacity-60 ring-offset-2 focus:outline-none",
+                                    selected
+                                      ? "bg-white shadow"
+                                      : "text-gray-500 hover:bg-gray-100"
+                                  )
+                                }
+                              >
+                                {star}
+                              </Tab>
+                            ))}
+                          </Tab.List>
+                        </Tab.Group>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-row gap-6">
+                    <div className="w-full">
+                      <label
+                        htmlFor="floorCount"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Number of floors
+                      </label>
+                      <input
+                        onBlur={(e) => handleFloorsChange(e)}
+                        defaultValue={floorCount}
+                        type="number"
+                        min="1"
+                        max="100"
+                        step="1"
+                        name="floorCount"
+                        id="floorCount"
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      />
+                    </div>
+                    <div className="w-full">
+                      <label
+                        htmlFor="roomCount"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Number of rooms per floor
+                      </label>
+                      <input
+                        onBlur={handleRoomCountChange}
+                        defaultValue={roomCount}
+                        type="number"
+                        min="1"
+                        max="100"
+                        step="1"
+                        name="roomCount"
+                        id="roomCount"
+                        className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-span-6 sm:col-span-3">
+                    <label
+                      htmlFor="address"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Address
+                    </label>
+                    <input
+                      onChange={(e) => setAddress(e.target.value)}
+                      type="text"
+                      name="address"
+                      id="address"
+                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                    />
+                  </div>
+                  <div style={{ width: "36rem" }}>
+                    <label
+                      htmlFor="roomTypes"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Room types
+                    </label>
+                    <TagsInput
+                      value={selected}
+                      onChange={setSelected}
+                      name="roomTypes"
+                    />
+                  </div>
+                  <div className="hidden md:block" aria-hidden="true">
+                    <div className="py-5">
+                      <div className="border-t border-gray-200" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-10 sm:mt-0">
+          <div className="md:grid md:grid-cols-3 md:gap-6">
+            <div className="md:col-span-1">
+              <div className="px-4 mt-4 md:mt-0 sm:px-0">
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  Floor types
+                </h3>
+                <p className="mt-1 text-sm text-gray-600">
+                  Select the type of rooms in each floor.
+                </p>
+              </div>
+            </div>
+            <div
+              style={{ maxWidth: "64rem" }}
+              className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0"
+            >
+              <div
+                style={{ boxShadow: "0 4px 0px rgba(0, 0, 0, 0.04)" }}
+                className="rounded-t-lg lg:rounded-t-none rounded-b-lg overflow-hidden"
+              >
+                <div className="px-4 bg-white sm:p-6 lg:pt-3 pb-64">
+                  <div className="grid grid-cols-3 gap-y-8 gap-x-4">
+                    {Array.from(Array(floorCount), (floor, index) => {
+                      return (
+                        <div className="w-fit flex flex-col" key={index}>
+                          <label
+                            htmlFor="floor"
+                            className=" text-sm font-medium text-gray-700"
                           >
-                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                          </svg>
-                        </span>
+                            {"Floor " + (index + 1)}
+                          </label>
+                          <select
+                            onChange={(e) => handleChangeFloorType(e, index)}
+                            className="rounded-md text-sm border-solid border-6 shadow border-gray-300"
+                          >
+                            {selected.map((roomType) => (
+                              <option key={roomType} className="text-md">
+                                {roomType.length > 14
+                                  ? roomType.substring(0, 9) + "..."
+                                  : roomType}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="hidden md:block" aria-hidden="true">
+                    <div className="mt-12">
+                      <div className="border-t border-gray-200" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-10 sm:mt-0">
+          <div className="md:grid md:grid-cols-3 md:gap-6">
+            <div className="md:col-span-1">
+              <div className="px-4 mt-4 md:mt-0 sm:px-0">
+                <h3 className="text-lg font-medium leading-6 text-gray-900">
+                  Room types
+                </h3>
+                <p className="mt-1 text-sm text-gray-600">
+                  Fill in the price per night for each room type.
+                </p>
+              </div>
+            </div>
+            <div className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0">
+              <div
+                style={{ boxShadow: "0 4px 0px rgba(0, 0, 0, 0.04)" }}
+                className="rounded-t-lg lg:rounded-t-none rounded-b-lg overflow-hidden"
+              >
+                <div className="px-4 bg-white sm:p-6 lg:pt-3 pb-64">
+                  <div className="grid grid-cols-4 gap-y-8">
+                    {selected.map((roomType, index) => {
+                      return (
+                        <div className="w-fit flex flex-col" key={index}>
+                          <label
+                            htmlFor="floor"
+                            className=" text-sm font-medium text-gray-700"
+                          >
+                            {roomType.length > 14
+                              ? roomType.substring(0, 12) + "..."
+                              : roomType}
+                          </label>
+                          <input
+                            onBlur={(e) => handleChangePrice(e, index)}
+                            type="number"
+                            min="1"
+                            defaultValue="1"
+                            max="100"
+                            step="0.01"
+                            name="roomCount"
+                            id="roomCount"
+                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="hidden md:block" aria-hidden="true">
+                    <div className="mt-12">
+                      <div className="border-t border-gray-200" />
+                    </div>
+                  </div>
+                  <div className="mt-10">
+                    <div className="flex justify-between md:justify-end gap-x-4">
+                      <Link href="/admin/hotels" className="w-full md:w-32">
                         <button
                           type="button"
-                          className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          className="bg-white w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50"
                         >
-                          Change
+                          Cancel
                         </button>
-                      </div>
+                      </Link>
+                      <button
+                        onClick={handleSubmit}
+                        type="submit"
+                        className={
+                          areInputsValid
+                            ? "ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600"
+                            : "disabled ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-400  focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        }
+                      >
+                        Save
+                      </button>
                     </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Cover photo
-                      </label>
-                      <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-                        <div className="space-y-1 text-center">
-                          <svg
-                            className="mx-auto h-12 w-12 text-gray-400"
-                            stroke="currentColor"
-                            fill="none"
-                            viewBox="0 0 48 48"
-                            aria-hidden="true"
-                          >
-                            <path
-                              d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                              strokeWidth={2}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                          <div className="flex text-sm text-gray-600">
-                            <label
-                              htmlFor="file-upload"
-                              className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
-                            >
-                              <span>Upload a file</span>
-                              <input
-                                id="file-upload"
-                                name="file-upload"
-                                type="file"
-                                className="sr-only"
-                              />
-                            </label>
-                            <p className="pl-1">or drag and drop</p>
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            PNG, JPG, GIF up to 10MB
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <button
-                      type="submit"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Save
-                    </button>
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div className="hidden sm:block" aria-hidden="true">
-          <div className="py-5">
-            <div className="border-t border-gray-200" />
-          </div>
-        </div>
-        <div className="mt-10 sm:mt-0">
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-              <div className="px-4 sm:px-0">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Personal Information
-                </h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  Use a permanent address where you can receive mail.
-                </p>
               </div>
-            </div>
-            <div className="mt-5 md:mt-0 md:col-span-2">
-              <form action="#" method="POST">
-                <div className="shadow overflow-hidden sm:rounded-md">
-                  <div className="px-4 py-5 bg-white sm:p-6">
-                    <div className="grid grid-cols-6 gap-6">
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          htmlFor="first-name"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          First name
-                        </label>
-                        <input
-                          type="text"
-                          name="first-name"
-                          id="first-name"
-                          autoComplete="given-name"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          htmlFor="last-name"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Last name
-                        </label>
-                        <input
-                          type="text"
-                          name="last-name"
-                          id="last-name"
-                          autoComplete="family-name"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-4">
-                        <label
-                          htmlFor="email-address"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Email address
-                        </label>
-                        <input
-                          type="text"
-                          name="email-address"
-                          id="email-address"
-                          autoComplete="email"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-3">
-                        <label
-                          htmlFor="country"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Country
-                        </label>
-                        <select
-                          id="country"
-                          name="country"
-                          autoComplete="country-name"
-                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        >
-                          <option>United States</option>
-                          <option>Canada</option>
-                          <option>Mexico</option>
-                        </select>
-                      </div>
-
-                      <div className="col-span-6">
-                        <label
-                          htmlFor="street-address"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Street address
-                        </label>
-                        <input
-                          type="text"
-                          name="street-address"
-                          id="street-address"
-                          autoComplete="street-address"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                        <label
-                          htmlFor="city"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          City
-                        </label>
-                        <input
-                          type="text"
-                          name="city"
-                          id="city"
-                          autoComplete="address-level2"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                        <label
-                          htmlFor="region"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          State / Province
-                        </label>
-                        <input
-                          type="text"
-                          name="region"
-                          id="region"
-                          autoComplete="address-level1"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-
-                      <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                        <label
-                          htmlFor="postal-code"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          ZIP / Postal code
-                        </label>
-                        <input
-                          type="text"
-                          name="postal-code"
-                          id="postal-code"
-                          autoComplete="postal-code"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <button
-                      type="submit"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-        <div className="hidden sm:block" aria-hidden="true">
-          <div className="py-5">
-            <div className="border-t border-gray-200" />
-          </div>
-        </div>
-        <div className="mt-10 sm:mt-0">
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-              <div className="px-4 sm:px-0">
-                <h3 className="text-lg font-medium leading-6 text-gray-900">
-                  Notifications
-                </h3>
-                <p className="mt-1 text-sm text-gray-600">
-                  Decide which communications you'd like to receive and how.
-                </p>
-              </div>
-            </div>
-            <div className="mt-5 md:mt-0 md:col-span-2">
-              <form action="#" method="POST">
-                <div className="shadow overflow-hidden sm:rounded-md">
-                  <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                    <fieldset>
-                      <legend className="text-base font-medium text-gray-900">
-                        By Email
-                      </legend>
-                      <div className="mt-4 space-y-4">
-                        <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              id="comments"
-                              name="comments"
-                              type="checkbox"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label
-                              htmlFor="comments"
-                              className="font-medium text-gray-700"
-                            >
-                              Comments
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when someones posts a comment on a
-                              posting.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              id="candidates"
-                              name="candidates"
-                              type="checkbox"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label
-                              htmlFor="candidates"
-                              className="font-medium text-gray-700"
-                            >
-                              Candidates
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate applies for a job.
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input
-                              id="offers"
-                              name="offers"
-                              type="checkbox"
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                            />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label
-                              htmlFor="offers"
-                              className="font-medium text-gray-700"
-                            >
-                              Offers
-                            </label>
-                            <p className="text-gray-500">
-                              Get notified when a candidate accepts or rejects
-                              an offer.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </fieldset>
-                    <fieldset>
-                      <div>
-                        <legend className="text-base font-medium text-gray-900">
-                          Push Notifications
-                        </legend>
-                        <p className="text-sm text-gray-500">
-                          These are delivered via SMS to your mobile phone.
-                        </p>
-                      </div>
-                      <div className="mt-4 space-y-4">
-                        <div className="flex items-center">
-                          <input
-                            id="push-everything"
-                            name="push-notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push-everything"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            Everything
-                          </label>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            id="push-email"
-                            name="push-notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push-email"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            Same as email
-                          </label>
-                        </div>
-                        <div className="flex items-center">
-                          <input
-                            id="push-nothing"
-                            name="push-notifications"
-                            type="radio"
-                            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
-                          />
-                          <label
-                            htmlFor="push-nothing"
-                            className="ml-3 block text-sm font-medium text-gray-700"
-                          >
-                            No push notifications
-                          </label>
-                        </div>
-                      </div>
-                    </fieldset>
-                  </div>
-                  <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    <button
-                      type="submit"
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </form>
             </div>
           </div>
         </div>
