@@ -139,12 +139,12 @@ export default function AddHotel() {
   }, [name, address, floors, roomTypePrice, roomCount, starCount]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col  lg:ml-16 xl:ml-0">
       <HotelHeading />
       <div className="p-8">
         <div>
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
+          <div className="xl:grid xl:grid-cols-3 xl:gap-6">
+            <div className="xl:col-span-1">
               <div className="px-4 sm:px-0">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Hotel Information
@@ -156,10 +156,13 @@ export default function AddHotel() {
             </div>
             <div
               style={{ maxWidth: "64rem" }}
-              className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0"
+              className="mt-5 2xl:ml-32 xl:mt-0 lg:col-span-2 mr-6 lg:mr-0"
             >
-              <div className="sm:overflow-hidden rounded-t-lg rounded-b-lg lg:rounded-b-none">
-                <div className="px-4 py-5 bg-white space-y-6 sm:p-6 lg:pb-0">
+              <div
+                style={{ boxShadow: "0 4px 0px rgba(0, 0, 0, 0.04)" }}
+                className="sm:overflow-hidden rounded-t-lg rounded-b-lg xl:rounded-b-none"
+              >
+                <div className="px-4 py-5 bg-white space-y-6 p-6 xl:pb-0">
                   <div className="flex flex-row gap-6">
                     <div className="w-full">
                       <label
@@ -279,7 +282,7 @@ export default function AddHotel() {
                       name="roomTypes"
                     />
                   </div>
-                  <div className="hidden md:block" aria-hidden="true">
+                  <div className="hidden xl:block" aria-hidden="true">
                     <div className="py-5">
                       <div className="border-t border-gray-200" />
                     </div>
@@ -290,9 +293,9 @@ export default function AddHotel() {
           </div>
         </div>
         <div className="mt-10 sm:mt-0">
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-              <div className="px-4 mt-4 md:mt-0 sm:px-0">
+          <div className="xl:grid xl:grid-cols-3 xl:gap-6">
+            <div className="xl:col-span-1">
+              <div className="px-4 mt-6 xl:mt-0 sm:px-0">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Floor types
                 </h3>
@@ -303,11 +306,11 @@ export default function AddHotel() {
             </div>
             <div
               style={{ maxWidth: "64rem" }}
-              className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0"
+              className="mt-5 2xl:ml-32 xl:mt-0 md:col-span-2 mr-6 md:mr-0"
             >
               <div
                 style={{ boxShadow: "0 4px 0px rgba(0, 0, 0, 0.04)" }}
-                className="rounded-t-lg lg:rounded-t-none rounded-b-lg overflow-hidden"
+                className="rounded-t-lg xl:rounded-t-none rounded-b-lg xl:rounded-b-none overflow-hidden"
               >
                 <div className="px-4 bg-white sm:p-6 lg:pt-3 pb-64">
                   <div className="grid grid-cols-3 gap-y-8 gap-x-4">
@@ -336,7 +339,7 @@ export default function AddHotel() {
                       );
                     })}
                   </div>
-                  <div className="hidden md:block" aria-hidden="true">
+                  <div className="hidden xl:block" aria-hidden="true">
                     <div className="mt-12">
                       <div className="border-t border-gray-200" />
                     </div>
@@ -347,9 +350,9 @@ export default function AddHotel() {
           </div>
         </div>
         <div className="mt-10 sm:mt-0">
-          <div className="md:grid md:grid-cols-3 md:gap-6">
-            <div className="md:col-span-1">
-              <div className="px-4 mt-4 md:mt-0 sm:px-0">
+          <div className="xl:grid xl:grid-cols-3 xl:gap-6">
+            <div className="xl:col-span-1">
+              <div className="px-4 mt-6 xl:mt-0 sm:px-0">
                 <h3 className="text-lg font-medium leading-6 text-gray-900">
                   Room types
                 </h3>
@@ -358,10 +361,10 @@ export default function AddHotel() {
                 </p>
               </div>
             </div>
-            <div className="mt-5 xl:ml-32 md:mt-0 md:col-span-2 mr-6 md:mr-0">
+            <div className="mt-5 2xl:ml-32 xl:mt-0 md:col-span-2 mr-6 md:mr-0">
               <div
                 style={{ boxShadow: "0 4px 0px rgba(0, 0, 0, 0.04)" }}
-                className="rounded-t-lg lg:rounded-t-none rounded-b-lg overflow-hidden"
+                className="rounded-t-lg xl:rounded-t-none rounded-b-lg overflow-hidden"
               >
                 <div className="px-4 bg-white sm:p-6 lg:pt-3 pb-64">
                   <div className="grid grid-cols-4 gap-y-8">

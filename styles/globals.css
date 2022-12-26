@@ -13,7 +13,8 @@ body {
 
 .rti--input:focus {
   box-shadow: none;
-  width: 12rem !important;
+  max-width: 12rem !important;
+  min-width: 2rem !important;
   outline: 0px;
 }
 
