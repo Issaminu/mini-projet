@@ -2,7 +2,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../prisma/prisma';
 import { Role } from '@prisma/client';
-import { getSession } from 'next-auth/react';
 import { getToken } from 'next-auth/jwt';
 const bcrypt = require('bcrypt');
 
