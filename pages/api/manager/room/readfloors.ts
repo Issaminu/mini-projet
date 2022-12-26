@@ -1,13 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import prisma from '../../../../prisma/prisma';
 import { getToken } from 'next-auth/jwt';
+import { User } from '@prisma/client';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const token = await getToken({ req });
-  const hotelId = token.user.hotelId;
+  const user = (await (await getToken({ req })).user) as User;
+  const hotelId = user.hotelId;
 
   switch (req.method) {
     case 'GET':

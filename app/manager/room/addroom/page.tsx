@@ -9,12 +9,17 @@ import {
 import axios from 'axios';
 import { userState } from '../../../../store/atoms';
 import { useRecoilState } from 'recoil';
-import { User } from '@prisma/client';
+import { Floor, RoomType } from '@prisma/client';
 import { Combobox } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+import Room from '../../../../components/Hotels/Hotel';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
+}
+
+interface floorType extends Floor {
+  name: string;
 }
 
 //i need to finish this page tomorrow
@@ -23,10 +28,12 @@ export default function page() {
   const [hotelData, setHotelData] = useState(null);
   const [roomQuery, setroomQuery] = useState('');
   const [floorQuery, setFloorQuery] = useState('');
-  const [selectedRoomType, setSelectedRoomType] = useState();
-  const [selectedFloor, setSelectedFloor] = useState();
-  const [roomTypes, setroomTypes] = useState([]);
-  const [floors, setFloors] = useState([]);
+  const [selectedRoomType, setSelectedRoomType] =
+    useState<RoomType>();
+  const [selectedFloor, setSelectedFloor] = useState<floorType>();
+  const [roomTypes, setroomTypes] = useState<RoomType[]>([]);
+  const [floors, setFloors] = useState<floorType[]>([]);
+  const [areInputsValid, setAreInputsValid] = useState(true);
   const roomName = useRef(null);
   const roomNumber = useRef(null);
   const roomType = useRef(null);
@@ -51,21 +58,27 @@ export default function page() {
         });
   }, [floorQuery]);
   const createRoom = useCallback(async () => {
+    setAreInputsValid(false);
+
     axios
       .post('/api/manager/room/create', {
         number: roomNumber.current.value,
-        floorId: roomFloor.current.value,
-        typeId: roomType.current.value,
+        floorId: selectedFloor.number,
+        typeId: selectedRoomType.id,
         hotelId: user.hotelId,
       })
       .then((res) => {
-        console.log('Succefully created');
-        console.log(res.data);
+        setAreInputsValid(true);
       })
       .catch((err) => {
         return err;
+        setAreInputsValid(true);
       });
-  }, []);
+  }, [selectedFloor, selectedRoomType]);
+  useEffect(() => {
+    console.log(selectedRoomType);
+  }, [selectedRoomType]);
+  //get all room types and floors
   useEffect(() => {
     axios
       .get('/api/manager/room/readtypes')
@@ -80,6 +93,7 @@ export default function page() {
       .then((res) => {
         setFloors(
           res.data.map((floor) => {
+            //just added a name property to the floor object
             if (floor.number === 1) {
               return {
                 name: floor.number + 'st',
@@ -149,7 +163,7 @@ export default function page() {
                       onChange={(event) =>
                         setFloorQuery(event.target.value)
                       }
-                      displayValue={(Floor) => Floor.name}
+                      displayValue={(Floor: floorType) => Floor.name}
                     />
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
                       <SelectorIcon
@@ -236,7 +250,9 @@ export default function page() {
                       onChange={(event) =>
                         setroomQuery(event.target.value)
                       }
-                      displayValue={(RoomType) => RoomType.name}
+                      displayValue={(RoomType: RoomType) =>
+                        RoomType.name
+                      }
                     />
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
                       <SelectorIcon
@@ -265,27 +281,11 @@ export default function page() {
                                 <div className="flex items-center">
                                   <span
                                     className={classNames(
-                                      'inline-block h-2 w-2 flex-shrink-0 rounded-full',
-                                      RoomType.online
-                                        ? 'bg-green-400'
-                                        : 'bg-gray-200'
-                                    )}
-                                    aria-hidden="true"
-                                  />
-                                  <span
-                                    className={classNames(
                                       'ml-3 truncate',
                                       selected && 'font-semibold'
                                     )}
                                   >
                                     {RoomType.name}
-                                    <span className="sr-only">
-                                      {' '}
-                                      is{' '}
-                                      {RoomType.online
-                                        ? 'online'
-                                        : 'offline'}
-                                    </span>
                                   </span>
                                 </div>
 
@@ -317,7 +317,11 @@ export default function page() {
                 <button
                   type="submit"
                   onClick={createRoom}
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className={
+                    areInputsValid
+                      ? 'ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600'
+                      : 'disabled ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-100'
+                  }
                 >
                   Add Room
                 </button>
