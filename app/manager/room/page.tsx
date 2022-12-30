@@ -1,30 +1,29 @@
-"use client";
-import prisma from "../../../prisma/prisma";
-import { useRecoilState } from "recoil";
-import { userState } from "../../../store/atoms";
-import { useEffect, useRef, useCallback, useState } from "react";
-import axios from "axios";
-import manager from "../page";
-import SingleRoom from "../../../components/room/SingleRoom";
+'use client';
+import prisma from '../../../prisma/prisma';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../../store/atoms';
+import { useEffect, useRef, useCallback, useState } from 'react';
+import axios from 'axios';
+import manager from '../page';
+import SingleRoom from '../../../components/room/SingleRoom';
 
 export default function Example() {
   const [user, setUser] = useRecoilState(userState);
   const [hotelData, setHotelData] = useState(null);
   const [rooms, setRooms] = useState([
-    {
-      id: null,
-      number: null,
-      floorId: null,
-      typeId: null,
-    },
+    // {
+    //   id: null,
+    //   number: null,
+    //   floorId: null,
+    //   typeId: null,
+    // }
   ]);
   const hotelId = useRef(null);
   const getHotelInfo = useCallback(async () => {
     await axios
-      .post("/api/manager/room/read", { hotelId: user.hotelId })
+      .post('/api/manager/room/read', { hotelId: user.hotelId })
       .then((res) => {
         setRooms(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         return err;
@@ -33,14 +32,15 @@ export default function Example() {
 
   useEffect(() => {
     getHotelInfo();
-    console.log(user);
   }, []);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 w-full">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Rooms</h1>
+          <h1 className="text-xl font-semibold text-gray-900">
+            Rooms
+          </h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the Rooms in the hotel and their state.
           </p>
@@ -96,7 +96,7 @@ export default function Example() {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {rooms.map((room) => {
-                    return <SingleRoom room={room} />;
+                    return <SingleRoom room={[room]} key={room.id} />;
                   })}
                 </tbody>
               </table>

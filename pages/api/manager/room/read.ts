@@ -1,6 +1,6 @@
 // This API is used to display all the Rooms of an hotel
-import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../../prisma/prisma";
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../../prisma/prisma';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,19 +11,37 @@ export default async function handler(
 
   try {
     // then we use the hotel id, to get all the rooms that belongs to it
+    // const rooms = await prisma.room.findMany({
+    //   where: {
+    //     hotelId: Number(hotelId),
+    //   },
+    // });
+    //i want left join room with room type
+
     const rooms = await prisma.room.findMany({
       where: {
         hotelId: Number(hotelId),
+      },
+      select: {
+        id: true,
+        number: true,
+        type: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        floorId: true,
       },
     });
 
     // then we send the rooms as an array of objects
     if (rooms.length === 0) {
-      return res.status(400).json({ message: "No rooms found" });
+      return res.status(400).json({ message: 'No rooms found' });
     }
     res.status(200).json(rooms);
   } catch (error) {
-    console.log(error);
-    console.log("Rooms could not be found");
+    // console.log(error);
+    console.log('Rooms could not be found');
   }
 }

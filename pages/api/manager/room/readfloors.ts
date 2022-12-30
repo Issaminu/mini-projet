@@ -18,7 +18,6 @@ export default async function handler(
             hotelId: Number(hotelId),
           },
         });
-        console.log(floors);
 
         res.status(200).json(floors);
       } catch (error) {
