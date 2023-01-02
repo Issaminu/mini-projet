@@ -1,5 +1,5 @@
-import { Fragment, useState, useCallback } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState, useCallback } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import {
   CalendarIcon,
   CogIcon,
@@ -12,45 +12,73 @@ import {
   UserIcon,
   ViewGridAddIcon,
   XIcon,
-} from "@heroicons/react/outline";
+} from '@heroicons/react/outline';
 import {
   ChevronLeftIcon,
   FilterIcon,
   MailIcon,
   PhoneIcon,
   SearchIcon,
-} from "@heroicons/react/solid";
-import tempLogo from "../../public/enset.png";
-import smTempLogo from "../../public/enset-sm.jpg";
-import Link from "next/link";
-import Image from "next/image";
-import axios from "axios";
-import { signOut } from "next-auth/react";
+  AcademicCapIcon,
+} from '@heroicons/react/solid';
+import tempLogo from '../../public/enset.png';
+import smTempLogo from '../../public/enset-sm.jpg';
+import Link from 'next/link';
+import Image from 'next/image';
+import axios from 'axios';
+import { signOut } from 'next-auth/react';
 function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ');
 }
-const user = {
-  name: "Tom Cook",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-const navigation = [
-  { name: "Rooms", href: "/manager/room", icon: HomeIcon, current: true },
-  { name: "Managers", href: "manager", icon: UserGroupIcon, current: false },
-  {name:"Reservations",href:"/manager/reservation",icon:CalendarIcon,current:false},
-    {name:"Hotel",href:"/manager/hotel",icon:ViewGridAddIcon,current:false},
-];
+
 const secondaryNavigation = [
-  { name: "Profile", href: "/manager/profile", icon: UserIcon, current: false },
+  {
+    name: 'Profile',
+    href: '/manager/profile',
+    icon: UserIcon,
+    current: false,
+  },
 ];
 
 const Navbar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const logout = (e: React.MouseEvent<Element, MouseEvent>) => {
     e.preventDefault();
-    localStorage.removeItem("recoil-persist");
-    signOut({ callbackUrl: "/login" });
+    localStorage.removeItem('recoil-persist');
+    signOut({ callbackUrl: '/login' });
   };
+  const [navigation, setnavigation] = useState([
+    {
+      name: 'Rooms',
+      href: '/manager/room',
+      icon: HomeIcon,
+      current: true,
+    },
+    {
+      name: 'Home',
+      href: 'manager',
+      icon: UserGroupIcon,
+      current: false,
+    },
+    {
+      name: 'Reception',
+      href: '/manager/reservation',
+      icon: CalendarIcon,
+      current: false,
+    },
+    {
+      name: 'Floor',
+      href: '/manager/floor',
+      icon: CalendarIcon,
+      current: false,
+    },
+    {
+      name: 'Room Type',
+      href: '/manager/type',
+      icon: AcademicCapIcon,
+      current: false,
+    },
+  ]);
   return (
     <div className="z-40">
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -120,18 +148,20 @@ const Navbar = () => {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? "bg-cyan-900 text-white"
-                            : "text-white hover:bg-cyan-800 hover:text-white",
-                          "group flex items-center px-2 py-2 text-base font-medium rounded-md"
+                            ? 'bg-cyan-900 text-white'
+                            : 'text-white hover:bg-cyan-800 hover:text-white',
+                          'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                         )}
-                        aria-current={item.current ? "page" : undefined}
+                        aria-current={
+                          item.current ? 'page' : undefined
+                        }
                       >
                         <item.icon
                           className={classNames(
                             item.current
-                              ? "text-white"
-                              : "text-white group-hover:text-white",
-                            "mr-4 h-6 w-6"
+                              ? 'text-white'
+                              : 'text-white group-hover:text-white',
+                            'mr-4 h-6 w-6'
                           )}
                           aria-hidden="true"
                         />
@@ -160,7 +190,6 @@ const Navbar = () => {
                   </div>
                 </nav>
               </div>
-            
             </div>
           </Transition.Child>
           <div className="flex-shrink-0 w-14" aria-hidden="true">
@@ -190,18 +219,27 @@ const Navbar = () => {
                       href={item.href}
                       className={classNames(
                         item.current
-                          ? "bg-cyan-900 text-white"
-                          : "text-white hover:bg-cyan-800",
-                        "group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+                          ? 'bg-cyan-900 text-white'
+                          : 'text-white hover:bg-cyan-800',
+                        'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                       )}
-                      aria-current={item.current ? "page" : undefined}
+                      aria-current={item.current ? 'page' : undefined}
+                      onClick={(e: any) => {
+                        setnavigation((prev) => {
+                          return prev.map((item) => {
+                            if (item.name === e.target.text) {
+                              return { ...item, current: true };
+                            } else return { ...item, current: false };
+                          });
+                        });
+                      }}
                     >
                       <item.icon
                         className={classNames(
                           item.current
-                            ? "text-white"
-                            : "text-white group-hover:text-white",
-                          "mr-3 flex-shrink-0 h-6 w-6"
+                            ? 'text-white'
+                            : 'text-white group-hover:text-white',
+                          'mr-3 flex-shrink-0 h-6 w-6'
                         )}
                         aria-hidden="true"
                       />
@@ -230,7 +268,6 @@ const Navbar = () => {
                 </div>
               </nav>
             </div>
-           
           </div>
         </div>
       </div>
@@ -261,3 +298,16 @@ const Navbar = () => {
   );
 };
 export default Navbar;
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  className="w-6 h-6"
+>
+  <path
+    fillRule="evenodd"
+    d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H15v-18a.75.75 0 000-1.5H3zM6.75 19.5v-2.25a.75.75 0 01.75-.75h3a.75.75 0 01.75.75v2.25a.75.75 0 01-.75.75h-3a.75.75 0 01-.75-.75zM6 6.75A.75.75 0 016.75 6h.75a.75.75 0 010 1.5h-.75A.75.75 0 016 6.75zM6.75 9a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zM6 12.75a.75.75 0 01.75-.75h.75a.75.75 0 010 1.5h-.75a.75.75 0 01-.75-.75zM10.5 6a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zm-.75 3.75A.75.75 0 0110.5 9h.75a.75.75 0 010 1.5h-.75a.75.75 0 01-.75-.75zM10.5 12a.75.75 0 000 1.5h.75a.75.75 0 000-1.5h-.75zM16.5 6.75v15h5.25a.75.75 0 000-1.5H21v-12a.75.75 0 000-1.5h-4.5zm1.5 4.5a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008zm.75 2.25a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75v-.008a.75.75 0 00-.75-.75h-.008zM18 17.25a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z"
+    clipRule="evenodd"
+  />
+</svg>;

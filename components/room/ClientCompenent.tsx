@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import UpdateRoom from './UpdateRoom';
+import ResirvationHistory from './ResirvationHistory';
 import { Room, Floor } from '@prisma/client';
 
 type roomTypeICreated = {
@@ -34,6 +35,7 @@ const ClientCompenent = (props: { roomProps: propRoomtype }) => {
   return (
     <div>
       <UpdateRoom roomProps={props.roomProps} />
+      {/* <ResirvationHistory roomId={props.roomProps.room.id} /> */}
     </div>
   );
 };

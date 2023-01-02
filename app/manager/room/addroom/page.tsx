@@ -65,7 +65,6 @@ export default function page() {
         number: roomNumber.current.value,
         floorId: selectedFloor.number,
         typeId: selectedRoomType.id,
-        hotelId: user.hotelId,
       })
       .then((res) => {
         setAreInputsValid(true);

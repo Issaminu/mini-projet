@@ -5,39 +5,31 @@ import { userState } from '../../../store/atoms';
 import { useEffect, useRef, useCallback, useState } from 'react';
 import axios from 'axios';
 import manager from '../page';
-import SingleReceptionist from '../../../components/room/Reception/SingleReceptionist';
-type receptiontype = {
+import SingleRoomType from '../../../components/room/roomtype/SingleRoomType';
+type roomtypetype = {
   id: number;
-  email: string;
   name: string;
-  role: string;
-  hotelId: number;
-  cin: string;
-  phoneNumber: string;
-  isReady: boolean;
+  price: string;
 };
 
 export default function Page() {
   const [user, setUser] = useRecoilState(userState);
   const [hotelData, setHotelData] = useState(null);
-  const [users, setusers] = useState<[receptiontype]>([
+  const [roomtypes, setRoomTypes] = useState<[roomtypetype]>([
     {
       id: 0,
-      email: '',
-      name: '',
-      role: '',
-      hotelId: 0,
-      cin: '',
-      phoneNumber: '',
-      isReady: false,
+
+      name: 'Loading...',
+
+      price: 'Loading...',
     },
   ]);
   const hotelId = useRef(null);
   const getHotelInfo = useCallback(async () => {
     await axios
-      .post('/api/manager/reception/read', { hotelId: user.hotelId })
+      .post('/api/manager/roomType/read', { hotelId: user.hotelId })
       .then((res) => {
-        setusers(res.data);
+        setRoomTypes(res.data);
       })
       .catch((err) => {
         return err;
@@ -53,19 +45,19 @@ export default function Page() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-xl font-semibold text-gray-900">
-            Reception
+            Room types
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all Receptions in your hotel
+            A list of all Room types in your hotel
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <a
             type="button"
-            href="/manager/reservation/addreception"
+            href="/manager/type/addroomtype"
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
           >
-            Add Receptionist
+            Add Room Type
           </a>
         </div>
       </div>
@@ -86,13 +78,13 @@ export default function Page() {
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      CIN
+                      Price
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      PhoneNumber
+                      Description
                     </th>
                     <th
                       scope="col"
@@ -109,11 +101,11 @@ export default function Page() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {users.map((user) => {
+                  {roomtypes.map((roomtype) => {
                     return (
-                      <SingleReceptionist
-                        user={[user]}
-                        key={user.id}
+                      <SingleRoomType
+                        key={roomtype.id}
+                        roomtype={roomtype}
                       />
                     );
                   })}

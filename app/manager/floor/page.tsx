@@ -5,45 +5,48 @@ import { userState } from '../../../store/atoms';
 import { useEffect, useRef, useCallback, useState } from 'react';
 import axios from 'axios';
 import manager from '../page';
-import SingleReceptionist from '../../../components/room/Reception/SingleReceptionist';
-type receptiontype = {
+import SingleFloor from '../../../components/room/floor/SingleFloor';
+type floortype = {
   id: number;
-  email: string;
-  name: string;
-  role: string;
-  hotelId: number;
-  cin: string;
-  phoneNumber: string;
-  isReady: boolean;
+  number: number;
+  create_time: string;
 };
 
 export default function Page() {
+  const [areInputsValid, setAreInputsValid] = useState(true);
   const [user, setUser] = useRecoilState(userState);
-  const [hotelData, setHotelData] = useState(null);
-  const [users, setusers] = useState<[receptiontype]>([
+  const [floors, setfloors] = useState<[floortype]>([
     {
       id: 0,
-      email: '',
-      name: '',
-      role: '',
-      hotelId: 0,
-      cin: '',
-      phoneNumber: '',
-      isReady: false,
+      number: 0,
+      create_time: '200/20002',
     },
   ]);
   const hotelId = useRef(null);
   const getHotelInfo = useCallback(async () => {
     await axios
-      .post('/api/manager/reception/read', { hotelId: user.hotelId })
+      .post('/api/manager/floor/read')
       .then((res) => {
-        setusers(res.data);
+        setfloors(res.data);
       })
       .catch((err) => {
         return err;
       });
   }, []);
 
+  const addfloor = useCallback(async () => {
+    setAreInputsValid(false);
+    await axios
+      .post('/api/manager/floor/create')
+      .then((res) => {
+        console.log(res.data);
+        setAreInputsValid(true);
+      })
+      .catch((err) => {
+        setAreInputsValid(true);
+        return err;
+      });
+  }, []);
   useEffect(() => {
     getHotelInfo();
   }, []);
@@ -60,13 +63,17 @@ export default function Page() {
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <a
+          <button
             type="button"
-            href="/manager/reservation/addreception"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+            className={
+              areInputsValid
+                ? 'ml-3 mt-3 inline-flex w-full md:w-32 justify-center py-2 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-700 hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-600'
+                : 'disabled ml-3 inline-flex w-full md:w-32 justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-100'
+            }
+            onClick={addfloor}
           >
-            Add Receptionist
-          </a>
+            Add Floor
+          </button>
         </div>
       </div>
       <div className="mt-8 flex flex-col">
@@ -80,19 +87,19 @@ export default function Page() {
                       scope="col"
                       className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                     >
-                      Name
+                      id
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      CIN
+                      number
                     </th>
                     <th
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      PhoneNumber
+                      created time
                     </th>
                     <th
                       scope="col"
@@ -109,13 +116,8 @@ export default function Page() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {users.map((user) => {
-                    return (
-                      <SingleReceptionist
-                        user={[user]}
-                        key={user.id}
-                      />
-                    );
+                  {floors.map((floor) => {
+                    return <SingleFloor floor={floor} />;
                   })}
                 </tbody>
               </table>

@@ -12,8 +12,6 @@ export default async function handler(
   switch (req.method) {
     case 'GET':
       try {
-        console.log('hotelId', hotelId);
-
         const roomTypes = await prisma.roomType.findMany({
           where: {
             hotelId: Number(hotelId),

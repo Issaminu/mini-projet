@@ -1,6 +1,7 @@
 // This API is used to display, update and delete a room based on the id given in the URL(aka dynamic route)
-import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "../../../../prisma/prisma";
+import { log } from 'console';
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '../../../../prisma/prisma';
 
 export default async function handler(
   req: NextApiRequest,
@@ -8,31 +9,35 @@ export default async function handler(
 ) {
   // here we store the id of the room
   const roomId = req.query.id;
+  console.log('Room ID:', roomId);
 
   // instead of creating multiple pages for each method, we can use a switch case to do it in one
   switch (req.method) {
     // if the method is GET (display of data)
-    case "GET":
+    case 'GET':
       try {
         // we get the room with the specified id
-        const room = await prisma.room.findFirst({
-          where: { id: Number(roomId) },
-        });
+        // const room = await prisma.room.findFirst({
+        //   where: { id: Number(roomId) },
+        // });
 
         // then we get all the reservations history of this room
-        const reservations = await prisma.reservation.findMany({
-          where: { roomId: Number(roomId) },
-        });
+        const reservations = await prisma.reservation.findMany({});
+        console.log(reservations);
 
         // finaly we send the room, and an array of all the reservations of it
-        res.status(200).json([room, reservations]);
+        res.status(200).json([reservations]);
       } catch (error) {
-        console.log("Room could not be found");
+        console.log(error);
+
+        console.log(
+          'Room could not be found or there is no reservation history'
+        );
       }
       break;
 
     // if the method is POST (updating data)
-    case "POST":
+    case 'POST':
       try {
         // store the data coming from the form
         const { number, floorId, typeId, hotelId } = req.body;
@@ -50,12 +55,12 @@ export default async function handler(
 
         res.json(room);
       } catch (error) {
-        console.log("Room could not be updated");
+        console.log('Room could not be updated');
       }
       break;
 
     // if the method is DELETE
-    case "DELETE":
+    case 'DELETE':
       try {
         // delete the room concerned
         const room = await prisma.room.delete({
@@ -64,7 +69,7 @@ export default async function handler(
 
         res.json(room);
       } catch (error) {
-        console.log("Room could not be deleted");
+        console.log('Room could not be deleted');
       }
       break;
 
