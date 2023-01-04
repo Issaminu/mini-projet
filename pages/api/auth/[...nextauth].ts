@@ -1,8 +1,8 @@
-import { Admin, Role } from "@prisma/client";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "../../../prisma/prisma";
-const bcrypt = require("bcrypt");
+
+const bcrypt = require("bcryptjs");
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -12,7 +12,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       //@ts-ignore
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         try {
           const user = await prisma.user.findUnique({
             where: {
@@ -71,7 +71,7 @@ export const authOptions = {
       },
     }),
   ],
-  secret: process.env.NEXTAUTH_SECRET, //process.env.SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },

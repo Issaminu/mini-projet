@@ -73,7 +73,7 @@ const Navbar = () => {
       current: false,
     },
     {
-      name: 'Room Type',
+      name: 'Hotel Type',
       href: '/manager/type',
       icon: AcademicCapIcon,
       current: false,

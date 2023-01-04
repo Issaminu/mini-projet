@@ -1,193 +1,173 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import {
-  ChevronLeftIcon,
-  FilterIcon,
-  MailIcon,
-  PhoneIcon,
-  SearchIcon,
-} from "@heroicons/react/solid";
+"use client";
+import { ChevronLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
+import { SendableHotelType } from "../../app/admin/page";
+import Table from "./Table";
+import { useRouter } from "next/navigation";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
-const profile = {
-  name: "Ricardo Cooper",
-  imageUrl:
-    "https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80",
-  coverImageUrl:
-    "https://images.unsplash.com/photo-1444628838545-ac4016a5418a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80",
-  about: `
-      <p>Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.</p>
-      <p>Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.</p>
-    `,
-  fields: {
-    Phone: "(555) 123-4567",
-    Email: "ricardocooper@Dashboard.com",
-    Title: "Senior Front-End Developer",
-    Team: "Product Development",
-    Location: "San Francisco",
-    Sits: "Oasis, 4th floor",
-    Salary: "$145,000",
-    Birthday: "June 8, 1990",
-  },
-};
-const tabs = [
-  { name: "Profile", href: "#", current: true },
-  { name: "Calendar", href: "#", current: false },
-  { name: "Recognition", href: "#", current: false },
-];
-const Room = (props) => {
+
+const Hotel = (props) => {
+  const router = useRouter();
+  const hotel: SendableHotelType = props.hotel;
+  console.log(hotel);
   return (
-    <div>
+    <div className="min-h-screen">
       <nav
-        onClick={props.handleShowRoomList}
-        className="cursor-pointer flex items-start mt-4 px-4 py-3 sm:px-6 lg:px-8 xl:hidden"
+        onClick={props.handleShowHotelList}
+        className="flex items-start px-4 py-3 mt-4 cursor-pointer lg:mt-0 sm:px-6 lg:px-8 xl:hidden"
         aria-label="Breadcrumb"
       >
-        <a className="inline-flex items-center space-x-3 text-sm font-medium text-gray-900">
+        <a className="inline-flex items-center space-x-3 font-medium text-gray-900 text-md">
           <ChevronLeftIcon
-            className="-ml-2 h-5 w-5 text-gray-400"
+            className="w-5 h-5 -ml-2 text-gray-400"
             aria-hidden="true"
           />
           <span>Directory</span>
         </a>
       </nav>
-      <article>
-        {/* Profile header */}
+      <div>
         <div>
-          <div>
-            <img
-              className="h-32 w-full object-cover lg:h-48"
-              src={profile.coverImageUrl}
-              alt=""
-            />
-          </div>
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
-              <div className="flex">
-                <img
-                  className="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32"
-                  src={profile.imageUrl}
-                  alt=""
-                />
-              </div>
-              <div className="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
-                <div className="sm:hidden 2xl:block mt-6 min-w-0 flex-1">
-                  <h1 className="text-2xl font-bold text-gray-900 truncate">
-                    {profile.name}
-                  </h1>
+          {/* Profile header */}
+          <div className="pb-6 mb-12 bg-cyan-800 rounded-b-3xl md:rounded-b-xl">
+            <div className="sm:px-6 lg:px-8">
+              <div className="sm:flex sm:items-end sm:space-x-5">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="invisible h-3 text-white sm:h-12 mb-7 sm:visible sm:block"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                </svg>
+                <div className=" sm:flex-1 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
+                  <div className="flex-1 min-w-0 mt-6 2xl:block">
+                    <div className="flex flex-row">
+                      <h1 className="flex flex-row ml-4 text-5xl font-bold text-gray-100">
+                        {hotel.name}
+                      </h1>
+                      <span className="flex items-center ml-3 text-xl wrap">
+                        {Array.from(Array(hotel.stars), () => {
+                          return <>⭐</>;
+                        })}
+                      </span>
+                    </div>
+                    <span className="ml-4 text-xl font-bold text-gray-100">
+                      {hotel.address}
+                    </span>
+                  </div>
+                  <div className="flex flex-col mx-6 mt-4 space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4 md:mx-0 md:mt-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        router.push("/admin/update-hotel/" + hotel.id);
+                      }}
+                      className="inline-flex justify-center px-4 py-2 font-medium text-white border border-green-500 rounded-md shadow-sm text-md active:bg-green-800"
+                      style={{ backgroundColor: "#17C964" }}
+                    >
+                      <PencilIcon
+                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                        aria-hidden="true"
+                      />
+                      <span>Modify</span>
+                    </button>
+                    <button
+                      style={{
+                        backgroundColor: "#F31260",
+                      }}
+                      type="button"
+                      className="inline-flex justify-center px-4 py-2 font-medium text-white border rounded-md shadow-sm text-md border-rose-600"
+                    >
+                      <TrashIcon
+                        className="w-5 h-5 mr-2 -ml-1 text-white"
+                        aria-hidden="true"
+                      />
+                      <span>Delete</span>
+                    </button>
+                  </div>
                 </div>
-                <div className="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                  >
-                    <MailIcon
-                      className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <span>Message</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
-                  >
-                    <PhoneIcon
-                      className="-ml-1 mr-2 h-5 w-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <span>Call</span>
-                  </button>
-                </div>
               </div>
             </div>
-            <div className="hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
-              <h1 className="text-2xl font-bold text-gray-900 truncate">
-                {profile.name}
-              </h1>
-            </div>
           </div>
-        </div>
-        {/* Tabs */}
-        <div className="mt-6 sm:mt-2 2xl:mt-5">
-          <div className="border-b border-gray-200">
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                {tabs.map((tab) => (
-                  <a
-                    key={tab.name}
-                    href={tab.href}
-                    className={classNames(
-                      tab.current
-                        ? "border-pink-500 text-gray-900"
-                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
-                      "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-                    )}
-                    aria-current={tab.current ? "page" : undefined}
-                  >
-                    {tab.name}
-                  </a>
-                ))}
-              </nav>
-            </div>
-          </div>
-        </div>
-        {/* Description list */}
-        <div className="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-            {Object.keys(profile.fields).map((field) => (
-              <div key={field} className="sm:col-span-1">
-                <dt className="text-sm font-medium text-gray-500">{field}</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {profile.fields[field]}
+          {/* Description list */}
+          <div className="max-w-5xl px-4 mx-auto lg:mt-24 sm:px-6 lg:px-8">
+            <dl className="grid grid-cols-1 ml-12 xl:ml-36 gap-x-4 lg:gap-x-2 gap-y-8 sm:grid-cols-2">
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Name of hotel
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">{hotel.name}</dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">Address</dt>
+                <dd className="mt-1 text-gray-900 text-md">{hotel.address}</dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Number of stars
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {Array.from(Array(hotel.stars), () => {
+                    return <>⭐</>;
+                  })}
                 </dd>
               </div>
-            ))}
-            <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">About</dt>
-              <dd
-                className="mt-1 max-w-prose text-sm text-gray-900 space-y-5"
-                dangerouslySetInnerHTML={{
-                  __html: profile.about,
-                }}
-              />
-            </div>
-          </dl>
-        </div>
-        {/* Team member list */}
-        <div className="mt-8 max-w-5xl mx-auto px-4 pb-12 sm:px-6 lg:px-8">
-          <h2 className="text-sm font-medium text-gray-500">Team members</h2>
-          <div className="mt-1 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {props.rooms.map((person) => (
-              <div
-                key={person.id}
-                className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-pink-500"
-              >
-                <div className="flex-shrink-0">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={person.imageUrl}
-                    alt=""
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <a href="#" className="focus:outline-none">
-                    <span className="absolute inset-0" aria-hidden="true" />
-                    <p className="text-sm font-medium text-gray-900">
-                      {person.name}
-                    </p>
-                    <p className="text-sm text-gray-500 truncate">
-                      {person.role}
-                    </p>
-                  </a>
-                </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Number of floors
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {hotel.Floor.length} floors
+                </dd>
               </div>
-            ))}
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Number of room types
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {hotel.RoomType.length} types of rooms
+                </dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Lowest price per night
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {Math.min(...hotel.RoomType.map((room) => room.price))} DH
+                </dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Creation time
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {hotel.createTime}
+                </dd>
+              </div>
+              <div className="sm:col-span-1">
+                <dt className="font-medium text-md text-cyan-700">
+                  Last update
+                </dt>
+                <dd className="mt-1 text-gray-900 text-md">
+                  {hotel.updateTime}
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <div className="max-w-5xl px-4 mx-auto mt-24 mb-6 sm:px-6 lg:px-8">
+            <p className="ml-12 font-medium xl:ml-36 text-md text-cyan-700">
+              Room Types
+            </p>
+            <div className="flex justify-center">
+              <Table hotel={hotel} />
+            </div>
+            <br></br>
           </div>
         </div>
-      </article>
+      </div>
     </div>
   );
 };
 
-export default Room;
+export default Hotel;

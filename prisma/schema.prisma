@@ -43,14 +43,14 @@ enum Role {
 }
 
 model Hotel {
-  id          Int        @id @default(autoincrement())
-  name        String     @db.VarChar(50)
-  address     String     @db.VarChar(255)
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(50)
+  address     String        @db.VarChar(255)
   stars       Int
-  create_time DateTime   @default(now())
-  update_time DateTime   @default(now())
+  create_time DateTime      @default(now())
+  update_time DateTime      @default(now())
   Floor       Floor[]
-  Room        Room[]
+  Hotel       Room[]
   User        User[]
   RoomType    RoomType[]
   Reservation Reservation[]
@@ -60,11 +60,14 @@ model Floor {
   id          Int      @id @default(autoincrement())
   number      Int
   hotelId     Int
+  roomTypeId  Int
+  roomType    RoomType @relation(fields: [roomTypeId], references: [id])
+  hotel       Hotel    @relation(fields: [hotelId], references: [id])
+  Hotel       Room[]
   create_time DateTime @default(now())
   update_time DateTime @default(now())
-  hotel       Hotel    @relation(fields: [hotelId], references: [id])
-  Room        Room[]
 
+  @@index([roomTypeId])
   @@index([hotelId])
 }
 
@@ -76,6 +79,7 @@ model RoomType {
   create_time DateTime @default(now())
   update_time DateTime @default(now())
   hotel       Hotel    @relation(fields: [hotelId], references: [id])
+  Floor       Floor[]
   Room        Room[]
 
   @@index([hotelId])
