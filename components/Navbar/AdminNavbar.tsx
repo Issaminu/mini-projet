@@ -257,7 +257,7 @@ const Navbar = () => {
                   <div className="ml-3">
                     <p className="text-sm font-semibold text-white">{name}</p>
                     <p className="text-xs font-semibold text-cyan-900 group-hover:text-gray-800">
-                      View profile
+                      Logout
                     </p>
                   </div>
                 </div>

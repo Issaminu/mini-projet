@@ -25,8 +25,8 @@ export default function Login() {
     setAreInfoValid(true);
     if (session) {
       setUser(session.user);
-      if (user.role) router.push("/" + user.role.toLowerCase());
-      else router.push("/admin/hotels");
+      if (user.role) router.push("/manager/room");
+      else router.push("/admin");
     }
   }, [session]);
   const handleSubmit = useCallback(
