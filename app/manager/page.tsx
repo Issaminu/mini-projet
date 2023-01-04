@@ -16,8 +16,11 @@ export default function manager() {
     setAreInfoValid(true);
     if (session) {
       setUser(session.user);
-      if (user?.role) router.push('/' + user.role.toLowerCase());
-      else router.push('/admin/hotels');
+      if (user?.role) {
+        if (user.role.toLocaleLowerCase() == 'manager') {
+          router.push('/' + user.role.toLowerCase() + '/room');
+        } else router.push('/' + user.role.toLowerCase());
+      } else router.push('/admin/hotels');
     }
   }, [session]);
 
