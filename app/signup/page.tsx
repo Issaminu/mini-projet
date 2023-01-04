@@ -33,7 +33,7 @@ export default function Signup() {
     setIsPasswordValid(true);
     if (session) {
       setUser(session.user);
-      if (user?.role) router.push("/" + user.role.toLowerCase());
+      if (user?.role) router.push("/" + user.role.toLowerCase()+"/room");
       else router.push("/dashboard");
     }
   }, [session]);

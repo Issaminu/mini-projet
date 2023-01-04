@@ -1,8 +1,8 @@
 // This API is used to display all the Rooms of an hotel
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../../prisma/prisma';
-import { getToken } from 'next-auth/jwt';
-import { User } from '@prisma/client';
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "../../../../prisma/prisma";
+import { getToken } from "next-auth/jwt";
+import { User } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,6 +28,8 @@ export default async function handler(
       select: {
         id: true,
         number: true,
+        create_time: true,
+        update_time: true,
         type: {
           select: {
             id: true,
@@ -42,11 +44,11 @@ export default async function handler(
     if (rooms.length === 0) {
       console.log(rooms);
 
-      return res.status(400).json({ message: 'No rooms found' });
+      return res.status(400).json({ message: "No rooms found" });
     }
     res.status(200).json(rooms);
   } catch (error) {
     console.log(error);
-    console.log('Rooms could not be found');
+    console.log("Rooms could not be found");
   }
 }

@@ -20,7 +20,7 @@ function classNames(...classes) {
 }
 
 const navigation = [
-  { name: "Hotels", href: "/admin/hotels", icon: HomeIcon, current: true },
+  { name: "Hotels", href: "/admin", icon: HomeIcon, current: true },
   { name: "Managers", href: "#", icon: UserGroupIcon, current: false },
 ];
 const secondaryNavigation = [

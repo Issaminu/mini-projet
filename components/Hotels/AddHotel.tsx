@@ -146,7 +146,7 @@ export default function AddRoom() {
   };
 
   return (
-    <div className="flex flex-col h-full lg:ml-16 xl:ml-0">
+    <div className="flex flex-col lg:ml-16 xl:ml-0">
       <LoadingBar height={3} color="#06b6d4" ref={ref} />
       <HotelHeading />
       <div className="p-8">
@@ -392,6 +392,7 @@ export default function AddRoom() {
                             type="number"
                             min="1"
                             defaultValue="1"
+                            max="100"
                             step="0.01"
                             name="roomCount"
                             id="roomCount"

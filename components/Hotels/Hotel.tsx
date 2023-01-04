@@ -108,9 +108,7 @@ const Hotel = (props) => {
                   Number of stars
                 </dt>
                 <dd className="mt-1 text-gray-900 text-md">
-                  {Array.from(Array(hotel.stars), () => {
-                    return <>⭐</>;
-                  })}
+                  {hotel.stars} stars
                 </dd>
               </div>
               <div className="sm:col-span-1">

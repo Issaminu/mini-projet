@@ -1,11 +1,11 @@
-'use client';
-import prisma from '../../../prisma/prisma';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../../store/atoms';
-import { useEffect, useRef, useCallback, useState } from 'react';
-import axios from 'axios';
-import manager from '../page';
-import SingleRoom from '../../../components/room/SingleRoom';
+"use client";
+import prisma from "../../../prisma/prisma";
+import { useRecoilState } from "recoil";
+import { userState } from "../../../store/atoms";
+import { useEffect, useRef, useCallback, useState } from "react";
+import axios from "axios";
+import manager from "../page";
+import SingleRoom from "../../../components/room/SingleRoom";
 
 export default function Example() {
   const [user, setUser] = useRecoilState(userState);
@@ -21,7 +21,7 @@ export default function Example() {
   const hotelId = useRef(null);
   const getHotelInfo = useCallback(async () => {
     await axios
-      .post('/api/manager/room/read', { hotelId: user.hotelId })
+      .post("/api/manager/room/read", { hotelId: user.hotelId })
       .then((res) => {
         setRooms(res.data);
       })
@@ -35,12 +35,10 @@ export default function Example() {
   }, []);
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 w-full">
+    <div className="w-full px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">
-            Rooms
-          </h1>
+          <h1 className="text-xl font-semibold text-gray-900">Rooms</h1>
           <p className="mt-2 text-sm text-gray-700">
             A list of all the Rooms in the hotel and their state.
           </p>
@@ -49,14 +47,14 @@ export default function Example() {
           <a
             type="button"
             href="/manager/room/addroom"
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+            className="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
           >
             Add Room
           </a>
         </div>
       </div>
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="flex flex-col mt-8">
+        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
               <table className="min-w-full divide-y divide-gray-300">
@@ -88,13 +86,19 @@ export default function Example() {
                     </th>
                     <th
                       scope="col"
-                      className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                      className="x-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
-                      <span className="sr-only">Edit</span>
+                      <span>Last Update</span>
+                    </th>
+                    <th
+                      scope="col"
+                      className="x-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      <span>Creation Date</span>
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
+                <tbody className="bg-white divide-y divide-gray-200">
                   {rooms.map((room) => {
                     return <SingleRoom room={[room]} key={room.id} />;
                   })}

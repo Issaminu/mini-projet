@@ -32,6 +32,16 @@ const singleRoom = (props: any) => {
             {props.room[0].roomState ? props.room[0].roomState : "Empty"}
           </span>
         </td>
+        <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+          <div className="text-gray-900">
+            {new Date(props.room[0].update_time).toDateString()}
+          </div>
+        </td>
+        <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
+          <div className="text-gray-900">
+            {new Date(props.room[0].create_time).toDateString()}
+          </div>
+        </td>
         <td className="relative py-4 pl-3 pr-4 text-sm font-medium text-right whitespace-nowrap sm:pr-6">
           <a
             href={`/manager/room/${props.room[0].id}`}

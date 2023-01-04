@@ -18,7 +18,7 @@ export default withAuth(
     //Checking user role against the `/manager` route
     else if (pathname.startsWith("/manager") && user.role != "MANAGER") {
       if (user.role == "ADMIN") {
-        return NextResponse.redirect(new URL("/admin/hotels", url));
+        return NextResponse.redirect(new URL("/admin    ", url));
       } else {
         return NextResponse.redirect(new URL("/reception", url));
       }
@@ -27,7 +27,7 @@ export default withAuth(
     //Checking user role against the `/reception` route
     else if (pathname.startsWith("/reception") && user.role != "RECEPTION") {
       if (user.role == "ADMIN") {
-        return NextResponse.redirect(new URL("/admin/hotels", url));
+        return NextResponse.redirect(new URL("/admin", url));
       } else {
         return NextResponse.redirect(new URL("/manager", url));
       }
