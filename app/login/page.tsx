@@ -1,9 +1,9 @@
 "use client";
-import { useSession, signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ExclamationCircleIcon } from "@heroicons/react/solid";
 import { userState } from "../../store/atoms";
 import { useRecoilState } from "recoil";
@@ -12,7 +12,7 @@ import logo from "../../public/enset-logo.webp";
 
 const error = "Wrong email or password";
 
-export default function Login(props) {
+export default function Login() {
   const router = useRouter();
   const email = useRef<HTMLInputElement>();
   const password = useRef<HTMLInputElement>();
@@ -54,7 +54,7 @@ export default function Login(props) {
     return (
       <>
         <div
-          className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"
+          className="flex flex-col justify-center min-h-full py-12 sm:px-6 lg:px-8"
           style={{
             background: "url('/login-bg.webp') no-repeat center center fixed",
             backgroundSize: "cover",
@@ -62,12 +62,12 @@ export default function Login(props) {
           }}
         >
           <div className="mt-8 sm:mx-auto sm:w-96 sm:max-w-md">
-            <div className="bg-white pt-14 pb-6 px-4 shadow sm:rounded-2xl sm:px-12">
+            <div className="px-4 pb-6 bg-white shadow pt-14 sm:rounded-2xl sm:px-12">
               <LoadingBar height={3} color="#06b6d4" ref={ref} />
-              <div className="sm:mx-auto mb-10 sm:w-full sm:max-w-md">
+              <div className="mb-10 sm:mx-auto sm:w-full sm:max-w-md">
                 <div className="flex justify-center">
                   <Image
-                    className="mx-auto h-10 w-auto"
+                    className="w-auto h-10 mx-auto"
                     src={logo}
                     alt="ENSET's logo"
                     loading="eager"
@@ -75,12 +75,12 @@ export default function Login(props) {
                   />
                 </div>
                 <h2
-                  className="mt-6 text-center text-3xl font-semibold "
+                  className="mt-6 text-3xl font-semibold text-center "
                   style={{ color: "#1e212a" }}
                 >
                   Welcome!
                 </h2>
-                <p className="mt-2 text-center text-sm text-gray-900">
+                <p className="mt-2 text-sm text-center text-gray-900">
                   Please sign in to your account
                 </p>
               </div>
@@ -104,7 +104,7 @@ export default function Login(props) {
                             autoComplete="email"
                             required
                             autoFocus
-                            className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                           />
                         </div>
                       </div>
@@ -123,7 +123,7 @@ export default function Login(props) {
                             ref={password}
                             autoComplete="password"
                             required
-                            className="shadow-sm focus:ring-cyan-500 focus:border-cyan-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm"
                           />
                         </div>
                       </div>
@@ -137,7 +137,7 @@ export default function Login(props) {
                         >
                           Email
                         </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
+                        <div className="relative mt-1 rounded-md shadow-sm">
                           <input
                             id="email"
                             name="email"
@@ -145,7 +145,7 @@ export default function Login(props) {
                             ref={email}
                             autoComplete="email"
                             required
-                            className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            className="block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                             aria-invalid="true"
                             aria-describedby="email-error"
                           />
@@ -158,7 +158,7 @@ export default function Login(props) {
                         >
                           Password
                         </label>
-                        <div className="mt-1 relative rounded-md shadow-sm">
+                        <div className="relative mt-1 rounded-md shadow-sm">
                           <input
                             id="password"
                             name="password"
@@ -166,14 +166,14 @@ export default function Login(props) {
                             ref={password}
                             autoComplete="password"
                             required
-                            className="block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm rounded-md"
+                            className="block w-full pr-10 text-red-900 placeholder-red-300 border-red-300 rounded-md focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                             aria-invalid="true"
                             aria-describedby="password-error"
                           />
                         </div>
                         <div className="flex flex-row">
                           <ExclamationCircleIcon
-                            className="h-4 w-4 mt-2 mr-2 text-red-500"
+                            className="w-4 h-4 mt-2 mr-2 text-red-500"
                             aria-hidden="true"
                           />
                           <p
@@ -194,11 +194,11 @@ export default function Login(props) {
                         id="remember-me"
                         name="remember-me"
                         type="checkbox"
-                        className="h-4 w-4 text-cyan-600 focus:ring-cyan-500 border-gray-300 rounded"
+                        className="w-4 h-4 border-gray-300 rounded text-cyan-600 focus:ring-cyan-500"
                       />
                       <label
                         htmlFor="remember-me"
-                        className="ml-2 block text-sm text-gray-900"
+                        className="block ml-2 text-sm text-gray-900"
                       >
                         Remember me
                       </label>
@@ -216,7 +216,7 @@ export default function Login(props) {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full h-11 flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-cyan-700 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-lg shadow-sm h-11 bg-cyan-700 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <div className="flex items-center h-full">Sign in</div>
                     </button>

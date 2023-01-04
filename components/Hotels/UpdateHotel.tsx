@@ -1,5 +1,5 @@
 "use client";
-import HotelHeading from "./HotelHeading";
+import HotelHeading from "./UpdateHotelHeading";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import { Tab } from "@headlessui/react";
@@ -9,6 +9,8 @@ import { useRecoilState } from "recoil";
 import { userState } from "../../store/atoms";
 import axios from "axios";
 import LoadingBar from "react-top-loading-bar";
+import { sendableHotelType } from "../../app/admin/update-hotel/[hotelId]/page";
+import { RoomType } from "@prisma/client";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -28,18 +30,22 @@ const starterRoomTypePrices = [
   { name: "Presidential", price: 1 },
 ];
 const starterRoomTypes = ["Normal", "Premium", "Presidential"];
-
-export default function AddRoom() {
+export default function UpdateHotel(props: {
+  hotel: sendableHotelType;
+  roomTypes: string[];
+}) {
   const router = useRouter();
-  const [starCount, setStarCount] = useState(0);
-  const [floors, setFloors] = useState(starterFloors);
-  const [floorCount, setFloorCount] = useState(5);
+  const [starCount, setStarCount] = useState(props.hotel.stars);
+  const [floors, setFloors] = useState(props.hotel.Floor);
+  const [floorCount, setFloorCount] = useState(floors.length);
   const [selected, setSelected] = useState(starterRoomTypes);
   const [roomCount, setRoomCount] = useState<number>(1);
-  const [roomTypePrice, setRoomTypePrice] = useState(starterRoomTypePrices);
+  const [roomTypePrice, setRoomTypePrice] = useState<Partial<RoomType[]>>(
+    props.hotel.RoomType
+  );
   const [areInputsValid, setAreInputsValid] = useState(false);
-  const [address, setAddress] = useState("");
-  const [name, setName] = useState("");
+  const [address, setAddress] = useState(props.hotel.address);
+  const [name, setName] = useState(props.hotel.name);
   const [user, setUser] = useRecoilState(userState);
   const ref = useRef(null);
 
@@ -67,7 +73,8 @@ export default function AddRoom() {
       for (let i = 0; i < e.target.value; i++) {
         if (!tempFloors[i])
           tempFloors[i] = {
-            name: i + 1,
+            number: i + 1,
+            //@ts-ignore
             roomType: "Normal",
           };
       }
@@ -85,6 +92,7 @@ export default function AddRoom() {
       let tempRoomTypePrice = [...roomTypePrice];
       for (let i = 0; i < selected.length; i++) {
         if (!tempRoomTypePrice[index]) {
+          //@ts-ignore
           tempRoomTypePrice[index] = {
             name: selected[index],
             price: 0,
@@ -100,6 +108,7 @@ export default function AddRoom() {
   const handleChangeFloorType = useCallback(
     (e, index) => {
       let tempFloors = [...floors];
+      //@ts-ignore
       tempFloors[index].roomType = e.target.value;
       setFloors(tempFloors);
     },
@@ -124,6 +133,7 @@ export default function AddRoom() {
     capitalizedAddress =
       capitalizedAddress.charAt(0).toUpperCase() + capitalizedAddress.slice(1);
     let hotel = {
+      hotelId: props.hotel.id,
       name: capitalizedName,
       address: capitalizedAddress,
       starCount: starCount,
@@ -134,7 +144,7 @@ export default function AddRoom() {
     console.log(hotel);
     setAreInputsValid(false);
     await axios
-      .put("/api/admin/hotel", hotel)
+      .patch("/api/admin/hotel", hotel)
       .then(async (res) => {
         ref.current.complete();
         router.push("/admin");
@@ -144,7 +154,6 @@ export default function AddRoom() {
         console.log(err);
       });
   };
-
   return (
     <div className="flex flex-col h-full lg:ml-16 xl:ml-0">
       <LoadingBar height={3} color="#06b6d4" ref={ref} />
@@ -182,6 +191,7 @@ export default function AddRoom() {
                       <input
                         onChange={(e) => setName(e.target.value)}
                         type="text"
+                        defaultValue={props.hotel.name}
                         name="name"
                         id="name"
                         className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -271,6 +281,7 @@ export default function AddRoom() {
                     </label>
                     <input
                       onChange={(e) => setAddress(e.target.value)}
+                      defaultValue={props.hotel.address}
                       type="text"
                       name="address"
                       id="address"
@@ -334,9 +345,16 @@ export default function AddRoom() {
                           <select
                             onChange={(e) => handleChangeFloorType(e, index)}
                             className="text-sm border-gray-300 border-solid rounded-md shadow border-6"
+                            /*
+                                                  // @ts-ignore */
+                            defaultValue={floors[index].roomType}
                           >
                             {selected.map((roomType) => (
-                              <option key={roomType} className="text-md">
+                              <option
+                                key={roomType}
+                                value={roomType}
+                                className="text-md"
+                              >
                                 {roomType.length > 14
                                   ? roomType.substring(0, 9) + "..."
                                   : roomType}

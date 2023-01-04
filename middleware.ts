@@ -1,5 +1,4 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
-import { Admin, User } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export default withAuth(
