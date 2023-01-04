@@ -1,9 +1,9 @@
 // This API is used for the Manager's profile page, which will combine the display of data as well as the ability to update it
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../prisma/prisma';
-import { Role } from '@prisma/client';
-import { getToken } from 'next-auth/jwt';
-const bcrypt = require('bcrypt');
+import { NextApiRequest, NextApiResponse } from "next";
+import prisma from "../../../prisma/prisma";
+import { Role } from "@prisma/client";
+import { getToken } from "next-auth/jwt";
+const bcrypt = require("bcryptjs");
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +17,7 @@ export default async function handler(
   // instead of creating multiple pages for each method, we can use a switch case to do it in one
   switch (req.method) {
     // if the method is GET (display of data)
-    case 'GET':
+    case "GET":
       try {
         const user = await prisma.user.findUnique({
           where: {
@@ -30,17 +30,16 @@ export default async function handler(
         // in case of an error, log it
         console.log(error);
 
-        res.status(404).json({ message: 'User could not be found' });
-        console.log('User could not be found');
+        res.status(404).json({ message: "User could not be found" });
+        console.log("User could not be found");
       }
       break;
 
     // if the method is POST (updating data)
-    case 'POST':
+    case "POST":
       try {
         // store the comming data from the form in this const object
-        const { name, email, password, phoneNumber, cin, hotelId } =
-          req.body;
+        const { name, email, password, phoneNumber, cin, hotelId } = req.body;
         // then update the row of this user with the info
         const userI = await prisma.user.findUnique({
           where: {
@@ -56,11 +55,11 @@ export default async function handler(
           if (regexName.test(name) == false) {
             return res
               .status(400)
-              .json({ message: 'The entered name is invalid' });
+              .json({ message: "The entered name is invalid" });
           }
           if (name.length < 3 || name.length > 30) {
             return res.status(400).json({
-              message: 'Name must be >= 3 and <=30 characters',
+              message: "Name must be >= 3 and <=30 characters",
             });
           }
           await prisma.user
@@ -74,7 +73,7 @@ export default async function handler(
             })
             .catch((err) => {
               console.log(err);
-              res.status(404).json({ message: 'Erreur accored' });
+              res.status(404).json({ message: "Erreur accored" });
             });
         }
 
@@ -84,8 +83,7 @@ export default async function handler(
 
           if (regexEmail.test(email) == false) {
             return res.status(400).json({
-              message:
-                'error":"The entered email address is not valid',
+              message: 'error":"The entered email address is not valid',
             });
           }
 
@@ -100,7 +98,7 @@ export default async function handler(
             })
             .catch((err) => {
               console.log(err);
-              res.status(400).json({ message: 'Erreur accuored' });
+              res.status(400).json({ message: "Erreur accuored" });
             });
         }
 
@@ -118,15 +116,11 @@ export default async function handler(
             })
             .catch((err) => {
               console.log(err);
-              res.status(400).json({ message: 'Erreur accuored' });
+              res.status(400).json({ message: "Erreur accuored" });
             });
         }
         //updating password
-        if (
-          password != null &&
-          password != '' &&
-          password != undefined
-        ) {
+        if (password != null && password != "" && password != undefined) {
           if (password.length < 8) {
             return res.status(400).json({
               message: 'error":"The entered password is not valid',
@@ -145,7 +139,7 @@ export default async function handler(
             })
             .catch((err) => {
               console.log(err);
-              res.status(400).json({ message: 'Erreur accuored' });
+              res.status(400).json({ message: "Erreur accuored" });
             });
         }
 
@@ -162,19 +156,17 @@ export default async function handler(
             })
             .catch((err) => {
               console.log(err);
-              res.status(400).json({ message: 'Erreur accuored' });
+              res.status(400).json({ message: "Erreur accuored" });
             });
         }
 
-        res.status(200).json('user updated');
+        res.status(200).json("user updated");
       } catch (error) {
         // in case of an error, log it
         console.log(error);
 
-        console.log('User could not be updated');
-        res
-          .status(404)
-          .json({ message: 'User could not be updated' });
+        console.log("User could not be updated");
+        res.status(404).json({ message: "User could not be updated" });
       }
       break;
 

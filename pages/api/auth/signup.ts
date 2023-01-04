@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../prisma/prisma";
 import { Role } from "@prisma/client";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 const signupAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req;
