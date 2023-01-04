@@ -37,9 +37,7 @@ export default async function handler(
 
     res.status(200).json({ floor: floor, message: 'Floor Created' });
   } catch (error) {
-    // if there's an error, log it.
     console.log(error);
-
     console.log('Floor Creation Failed');
   }
 }
