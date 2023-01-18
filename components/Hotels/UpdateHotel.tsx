@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import { Tab } from "@headlessui/react";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useRecoilState } from "recoil";
 import { userState } from "../../store/atoms";
 import axios from "axios";

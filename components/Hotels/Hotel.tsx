@@ -3,6 +3,7 @@ import { ChevronLeftIcon, PencilIcon, TrashIcon } from "@heroicons/react/solid";
 import { SendableHotelType } from "../../app/admin/page";
 import Table from "./Table";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -58,20 +59,19 @@ const Hotel = (props) => {
                     </span>
                   </div>
                   <div className="flex flex-col mx-6 mt-4 space-y-3 justify-stretch sm:flex-row sm:space-y-0 sm:space-x-4 md:mx-0 md:mt-0">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        router.push("/admin/update-hotel/" + hotel.id);
-                      }}
-                      className="inline-flex justify-center px-4 py-2 font-medium text-white border border-green-500 rounded-md shadow-sm text-md active:bg-green-800"
-                      style={{ backgroundColor: "#17C964" }}
-                    >
-                      <PencilIcon
-                        className="w-5 h-5 mr-2 -ml-1 text-white"
-                        aria-hidden="true"
-                      />
-                      <span>Modify</span>
-                    </button>
+                    <Link href={"/admin/update-hotel/" + hotel.id}>
+                      <button
+                        type="button"
+                        className="inline-flex justify-center px-4 py-2 font-medium text-white border border-green-500 rounded-md shadow-sm text-md active:bg-green-800"
+                        style={{ backgroundColor: "#17C964" }}
+                      >
+                        <PencilIcon
+                          className="w-5 h-5 mr-2 -ml-1 text-white"
+                          aria-hidden="true"
+                        />
+                        <span>Modify</span>
+                      </button>
+                    </Link>
                     <button
                       style={{
                         backgroundColor: "#F31260",

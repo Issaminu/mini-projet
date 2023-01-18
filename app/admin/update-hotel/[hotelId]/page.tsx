@@ -6,7 +6,7 @@ export type sendableHotelType = Partial<Hotel> & {
   Floor: Partial<Floor[]>;
   RoomType: Partial<RoomType[]>;
 };
-const getHotel = async (hotelId) => {
+const getHotel = async (hotelId: number) => {
   const hotel = await prisma.hotel.findUnique({
     where: {
       id: hotelId,
