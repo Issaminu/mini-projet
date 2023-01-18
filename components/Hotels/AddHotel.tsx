@@ -29,7 +29,7 @@ const starterRoomTypePrices = [
 ];
 const starterRoomTypes = ["Normal", "Premium", "Presidential"];
 
-const getHotel = (
+const getHotelObject = (
   capitalizedName: string,
   capitalizedAddress: string,
   starCount: number,
@@ -52,7 +52,7 @@ const getHotel = (
   };
   return hotel;
 };
-export type SendableHotelInfo = ReturnType<typeof getHotel>;
+export type SendableHotelInfo = ReturnType<typeof getHotelObject>;
 
 export default function AddRoom() {
   const router = useRouter();
@@ -148,7 +148,7 @@ export default function AddRoom() {
     let capitalizedAddress = address;
     capitalizedAddress =
       capitalizedAddress.charAt(0).toUpperCase() + capitalizedAddress.slice(1);
-    const hotel = getHotel(
+    const hotel = getHotelObject(
       capitalizedName,
       capitalizedAddress,
       starCount,
