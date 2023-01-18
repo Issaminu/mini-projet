@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getToken } from "next-auth/jwt";
 import prisma from "../../../prisma/prisma";
 import { NextRequestWithAuth } from "next-auth/middleware";
+import { SendableHotelInfo } from "../../../components/Hotels/AddHotel";
 
 export default async function hotelsAPI(
   req: NextApiRequest & NextRequestWithAuth,
@@ -17,12 +18,12 @@ export default async function hotelsAPI(
     case "PUT":
       try {
         const { name, address, starCount, roomTypes, floors, roomCount } =
-          req.body;
+          req.body as SendableHotelInfo;
         const hotel = await prisma.hotel.create({
           data: {
             name: name,
             address: address,
-            stars: parseInt(starCount),
+            stars: starCount,
           },
         });
         await prisma.user.update({
@@ -41,7 +42,7 @@ export default async function hotelsAPI(
           tempRoomType = await prisma.roomType.create({
             data: {
               name: roomType.name,
-              price: parseFloat(roomType.price),
+              price: roomType.price,
               hotelId: hotel.id,
             },
           });
@@ -52,8 +53,9 @@ export default async function hotelsAPI(
         for (const floor of floors) {
           tempFloor = await prisma.floor.create({
             data: {
-              number: parseInt(floor.name),
+              number: floor.name,
               hotelId: hotel.id,
+              roomTypeId: floor.roomTypeId,
             },
           });
           floor.savedRoomId = tempFloor.id;
@@ -66,12 +68,11 @@ export default async function hotelsAPI(
               break;
             }
           }
-          for (let i = 0; i < parseInt(roomCount); i++) {
+          for (let i = 0; i < roomCount; i++) {
             rooms.push({
-              number:
-                (parseInt(floor.name) - 1) * parseInt(roomCount) + (i + 1),
-              floorId: parseInt(floor.savedRoomId),
-              typeId: parseInt(floor.roomTypeId),
+              number: (floor.name - 1) * roomCount + (i + 1),
+              floorId: floor.savedRoomId,
+              typeId: floor.roomTypeId,
               hotelId: hotel.id,
             });
           }

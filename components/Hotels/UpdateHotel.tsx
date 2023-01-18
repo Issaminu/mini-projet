@@ -1,5 +1,4 @@
 "use client";
-import HotelHeading from "./UpdateHotelHeading";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { TagsInput } from "react-tag-input-component";
 import { Tab } from "@headlessui/react";
@@ -11,25 +10,13 @@ import axios from "axios";
 import LoadingBar from "react-top-loading-bar";
 import { sendableHotelType } from "../../app/admin/update-hotel/[hotelId]/page";
 import { RoomType } from "@prisma/client";
+import UpdateHotelHeading from "./UpdateHotelHeading";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const stars = [0, 1, 2, 3, 4, 5];
-const starterFloors = [
-  { name: 1, roomType: "Normal" },
-  { name: 2, roomType: "Normal" },
-  { name: 3, roomType: "Normal" },
-  { name: 4, roomType: "Normal" },
-  { name: 5, roomType: "Normal" },
-];
-const starterRoomTypePrices = [
-  { name: "Normal", price: 1 },
-  { name: "Premium", price: 1 },
-  { name: "Presidential", price: 1 },
-];
-const starterRoomTypes = ["Normal", "Premium", "Presidential"];
 export default function UpdateHotel(props: {
   hotel: sendableHotelType;
   roomTypes: string[];
@@ -38,7 +25,7 @@ export default function UpdateHotel(props: {
   const [starCount, setStarCount] = useState(props.hotel.stars);
   const [floors, setFloors] = useState(props.hotel.Floor);
   const [floorCount, setFloorCount] = useState(floors.length);
-  const [selected, setSelected] = useState(starterRoomTypes);
+  const [selected, setSelected] = useState(props.roomTypes);
   const [roomCount, setRoomCount] = useState<number>(1);
   const [roomTypePrice, setRoomTypePrice] = useState<Partial<RoomType[]>>(
     props.hotel.RoomType
@@ -155,9 +142,9 @@ export default function UpdateHotel(props: {
       });
   };
   return (
-    <div className="flex flex-col h-full lg:ml-16 xl:ml-0">
+    <div className="flex flex-col md:ml-16 xl:ml-0">
       <LoadingBar height={3} color="#06b6d4" ref={ref} />
-      <HotelHeading />
+      <UpdateHotelHeading />
       <div className="p-8">
         <div>
           <div className="xl:grid xl:grid-cols-3 xl:gap-6">
@@ -281,8 +268,8 @@ export default function UpdateHotel(props: {
                     </label>
                     <input
                       onChange={(e) => setAddress(e.target.value)}
-                      defaultValue={props.hotel.address}
                       type="text"
+                      defaultValue={props.hotel.address}
                       name="address"
                       id="address"
                       className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -344,17 +331,12 @@ export default function UpdateHotel(props: {
                           </label>
                           <select
                             onChange={(e) => handleChangeFloorType(e, index)}
-                            className="text-sm border-gray-300 border-solid rounded-md shadow border-6"
-                            /*
-                                                  // @ts-ignore */
+                            // @ts-ignore */
                             defaultValue={floors[index].roomType}
+                            className="text-sm border-gray-300 border-solid rounded-md shadow border-6"
                           >
                             {selected.map((roomType) => (
-                              <option
-                                key={roomType}
-                                value={roomType}
-                                className="text-md"
-                              >
+                              <option key={roomType} className="text-md">
                                 {roomType.length > 14
                                   ? roomType.substring(0, 9) + "..."
                                   : roomType}
@@ -410,6 +392,7 @@ export default function UpdateHotel(props: {
                             type="number"
                             min="1"
                             defaultValue="1"
+                            max="100"
                             step="0.01"
                             name="roomCount"
                             id="roomCount"

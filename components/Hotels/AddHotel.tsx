@@ -29,6 +29,31 @@ const starterRoomTypePrices = [
 ];
 const starterRoomTypes = ["Normal", "Premium", "Presidential"];
 
+const getHotel = (
+  capitalizedName: string,
+  capitalizedAddress: string,
+  starCount: number,
+  roomCount: number,
+  roomTypePrice: { name: string; price: number }[],
+  floors: {
+    roomTypeId?: number;
+    savedRoomId?: number;
+    name: number;
+    roomType: string;
+  }[]
+) => {
+  let hotel = {
+    name: capitalizedName,
+    address: capitalizedAddress,
+    starCount: starCount,
+    roomCount: parseInt(String(roomCount)),
+    roomTypes: roomTypePrice,
+    floors: floors,
+  };
+  return hotel;
+};
+export type SendableHotelInfo = ReturnType<typeof getHotel>;
+
 export default function AddRoom() {
   const router = useRouter();
   const [starCount, setStarCount] = useState(0);
@@ -123,14 +148,14 @@ export default function AddRoom() {
     let capitalizedAddress = address;
     capitalizedAddress =
       capitalizedAddress.charAt(0).toUpperCase() + capitalizedAddress.slice(1);
-    let hotel = {
-      name: capitalizedName,
-      address: capitalizedAddress,
-      starCount: starCount,
-      roomCount: parseInt(String(roomCount)),
-      roomTypes: roomTypePrice,
-      floors: floors,
-    };
+    const hotel = getHotel(
+      capitalizedName,
+      capitalizedAddress,
+      starCount,
+      roomCount,
+      roomTypePrice,
+      floors
+    );
     console.log(hotel);
     setAreInputsValid(false);
     await axios
