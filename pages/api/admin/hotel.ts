@@ -51,6 +51,12 @@ export default async function hotelsAPI(
 
         let tempFloor: Floor;
         for (const floor of floors) {
+          tempRoomTypes.every((roomType) => {
+            if (roomType.name === floor.roomType) {
+              floor.roomTypeId = roomType.id;
+              return;
+            }
+          });
           tempFloor = await prisma.floor.create({
             data: {
               number: floor.name,
