@@ -9,6 +9,7 @@ import { userState } from "../../store/atoms";
 import { useRecoilState } from "recoil";
 import LoadingBar from "react-top-loading-bar";
 import logo from "../../public/enset-logo.webp";
+import { User } from "@prisma/client";
 
 const error = "Wrong email or password";
 
@@ -25,7 +26,8 @@ export default function Login() {
     setAreInfoValid(true);
     if (session) {
       setUser(session.user);
-      if (user.role) router.push("/manager/room");
+      if ((session.user as Partial<User>).role == "MANAGER")
+        router.push("/manager/room");
       else router.push("/admin");
     }
   }, [session]);
