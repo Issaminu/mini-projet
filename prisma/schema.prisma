@@ -63,9 +63,9 @@ model Floor {
   roomTypeId  Int
   roomType    RoomType @relation(fields: [roomTypeId], references: [id])
   hotel       Hotel    @relation(fields: [hotelId], references: [id])
-  Hotel       Room[]
   create_time DateTime @default(now())
   update_time DateTime @default(now())
+  Room        Room[]
 
   @@index([roomTypeId])
   @@index([hotelId])
